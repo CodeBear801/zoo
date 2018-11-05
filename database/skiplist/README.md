@@ -1,0 +1,4 @@
+skiplist
+========
+
+Skip lists: a probabilistic alternative to balanced trees
