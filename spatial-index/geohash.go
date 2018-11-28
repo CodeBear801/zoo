@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	// set specific bits, {10000, 01000, 00100, 00010, 000001}
+	// set specific bits, {10000, 01000, 00100, 00010, 00001}
 	bits = []int{16, 8, 4, 2, 1}
 	// base32 need 5 bits
 	base32 = []byte(BASE32)
