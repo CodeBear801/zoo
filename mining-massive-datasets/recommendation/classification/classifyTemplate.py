@@ -25,6 +25,7 @@ class Classifier:
         self.data = []
         for line in lines[1:]:
             fields = line.strip().split('\t')
+            # print('+++ fields is ' + str(fields))
             ignore = []
             vector = []
             for i in range(len(fields)):
@@ -36,8 +37,10 @@ class Classifier:
                     classification = fields[i]
             self.data.append((classification, vector, ignore))
         self.rawData = list(self.data)
+        #print ("+++ self.rawData is " + str(self.rawData))
         # get length of instance vector
         self.vlen = len(self.data[0][1])
+        #print ("self.vlen is " + str(self.vlen))
         # now normalize the data
         for i in range(self.vlen):
             self.normalizeColumn(i)
@@ -79,7 +82,7 @@ class Classifier:
        col = [v[1][columnNumber] for v in self.data]
        median = self.getMedian(col)
        asd = self.getAbsoluteStandardDeviation(col, median)
-       #print("Median: %f   ASD = %f" % (median, asd))
+       #print("+++ Median: %f   ASD = %f" % (median, asd))
        self.medianAndDeviation.append((median, asd))
        for v in self.data:
            v[1][columnNumber] = (v[1][columnNumber] - median) / asd
@@ -108,8 +111,9 @@ class Classifier:
 
     def nearestNeighbor(self, itemVector):
         """return nearest neighbor to itemVector"""
-        
-        return ((0, ("REPLACE THIS LINE WITH CORRECT RETURN", [0], [])))
+        #return ((0, ("REPLACE THIS LINE WITH CORRECT RETURN", [0], [])))
+        return min([ (self.manhattan(itemVector, item[1]), item)
+                     for item in self.data])
     
     def classify(self, itemVector):
         """Return class we think item Vector is in"""

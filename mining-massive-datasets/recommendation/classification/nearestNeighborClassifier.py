@@ -214,7 +214,7 @@ def test(training_filename, test_filename):
 ##
 ##  Here are examples of how the classifier is used on different data sets
 ##  in the book.
-#  test('athletesTrainingSet.txt', 'athletesTestSet.txt')
+test('athletesTrainingSet.txt', 'athletesTestSet.txt')
 #  test("irisTrainingSet.data", "irisTestSet.data")
-#  test("mpgTrainingSet.txt", "mpgTestSet.txt")
+# test("mpgTrainingSet.txt", "mpgTestSet.txt")
     
