@@ -198,15 +198,18 @@ class recommender:
       #
       # First load book ratings into self.data
       #
-      f = codecs.open(path + "u.data", 'r', 'utf8')
+      f = codecs.open(path + "BX-Book-Ratings.csv", 'r', 'utf8',errors='ignore')
+      # skip the first line
+      first_line = f.readline() 
       for line in f:
+         # print ('+++ line = ' + line)
          i += 1
          # separate line into fields
          fields = line.split(';')
          user = fields[0].strip('"')
          book = fields[1].strip('"')
          rating = int(fields[2].strip().strip('"'))
-         if rating > 5:
+         if rating > 10:
             print("EXCEEDING ", rating)
          if user in self.data:
             currentRatings = self.data[user]
@@ -219,7 +222,7 @@ class recommender:
       # Now load books into self.productid2name
       # Books contains isbn, title, and author among other fields
       #
-      f = codecs.open(path + "BX-Books.csv", 'r', 'utf8')
+      f = codecs.open(path + "BX-Books.csv", 'r', 'utf8',errors='ignore')
       for line in f:
          i += 1
          # separate line into fields
@@ -234,7 +237,7 @@ class recommender:
       #  Now load user info into both self.userid2name and
       #  self.username2id
       #
-      f = codecs.open(path + "BX-Users.csv", 'r', 'utf8')
+      f = codecs.open(path + "BX-Users.csv", 'r', 'utf8',errors='ignore')
       for line in f:
          i += 1
          # separate line into fields
@@ -368,6 +371,7 @@ class recommender:
          weight = nearest[i][1] / totalDistance
          # get the name of the person
          name = nearest[i][0]
+         print ('+++ name is ' + name)
          # get the ratings for this person
          neighborRatings = self.data[name]
          # get the name of the person
@@ -398,3 +402,12 @@ for b in bands:
 
 
 print (computeUserAverages(users3))
+
+recommender1 = recommender(users)
+recommend1 = recommender1.recommend("Bill")
+print ('recommendattion for bill is ' + str(recommend1))
+
+recommender2 = recommender({}, 3)
+recommender2.loadBookDB('/Users/xunliu/Desktop/git/zoo/pg2dm-python/pg2dm-python/ch3/BX-CSV-Dump/')
+recommendresult2 = recommender2.recommend('728')
+print ('+++ ' + str(recommendresult2))
