@@ -1,12 +1,33 @@
   
 # 
-#  Naive Bayes Classifier chapter 6
+#  Naive Bayes Classifier 
 #
 
 
 # _____________________________________________________________________
 
 import math
+import pprint
+
+
+def prettydict(d, indent=0):
+    for key, value in d.items():
+        print('\t' * indent + str(key))
+        if isinstance(value, dict):
+            prettydict(value, indent+1)
+        elif isinstance(value, list):
+            prettylist(value, indent+1)
+        else:
+            print('\t' * (indent+1) + str(value))
+
+def prettylist(l, indent=0):
+    for value in l:
+        if isinstance(value, dict):
+            prettydict(value, indent+1)
+        elif isinstance(value, list):
+            prettylist(value, indent+1)
+        else:
+            print('\t' * (indent+1) + str(value))
 
 class Classifier:
     def __init__(self, bucketPrefix, testBucketNumber, dataFormat):
@@ -82,7 +103,10 @@ class Classifier:
                         numericValues[category].setdefault(col, [])
                         numericValues[category][col].append(columnValue)
                     
-        
+
+
+        prettydict(classes)
+
         #
         # ok done counting. now compute probabilities
         #
@@ -90,6 +114,7 @@ class Classifier:
         #
         for (category, count) in classes.items():
             self.prior[category] = count / total
+        
         #
         # now compute conditional probabilities p(h|D)
         #
@@ -107,12 +132,15 @@ class Classifier:
         self.means = {}
         self.ssd = {}
 #        self.totals = totals
+        pprint.pprint(totals)
         for (category, columns) in totals.items():
             self.means.setdefault(category, {})
             for (col, cTotal) in columns.items():
                 self.means[category][col] = cTotal / classes[category]
         # standard deviation
         
+        pprint.pprint(numericValues)
+
         for (category, columns) in numericValues.items():
             
             self.ssd.setdefault(category, {})
@@ -124,6 +152,8 @@ class Classifier:
                 columns[col] = 0
                 self.ssd[category][col] = math.sqrt(SumOfSquareDifferences / (classes[category]  - 1))      
         
+
+
 
  # test the code
 
