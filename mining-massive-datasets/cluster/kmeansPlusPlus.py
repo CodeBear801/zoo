@@ -1,5 +1,6 @@
 import math
 import random 
+import pprint
 
 
 """
@@ -62,6 +63,7 @@ class kClusterer:
         header = lines[0].split(',')
         self.cols = len(header)
         self.data = [[] for i in range(len(header))]
+        #pprint.pprint(self.data)
         # we are storing the data by column.
         # For example, self.data[0] is the data from column 0.
         # self.data[0][10] is the column 0 value of item 10.
@@ -74,7 +76,11 @@ class kClusterer:
                    toggle = 1
                 else:
                     self.data[cell].append(float(cells[cell]))
-                    
+        
+        print('-------------- data is ')
+        pprint.pprint(self.data)
+        print('-------------- ')
+
         self.datasize = len(self.data[1])
         self.memberOf = [-1 for x in range(len(self.data[1]))]
         #
@@ -117,12 +123,17 @@ class kClusterer:
             # the closest centroid
             weights = [self.distanceToClosestCentroid(x, centroids) 
                        for x in range(len(self.data[0]))]
+            print('###### weights1')
+            pprint.pprint(weights)
             total = sum(weights)
             # instead of raw distances, convert so sum of weight = 1
+            print('###### weights2')
             weights = [x / total for x in weights]
+            pprint.pprint(weights)
             #
             # now roll virtual die
             num = random.random()
+            print('num is ' + str(num))
             total = 0
             x = -1
             # the roulette wheel simulation
@@ -140,13 +151,16 @@ class kClusterer:
         """Using the points in the clusters, determine the centroid
         (mean point) of each cluster"""
         members = [self.memberOf.count(i) for i in range(len(self.centroids))]
+        print('+++ in the function of updateCentroids')
+        pprint.pprint(members)
         
+        pprint.pprint(self.centroids)
         self.centroids = [[sum([self.data[k][i]
                             for i in range(len(self.data[0]))
                             if self.memberOf[i] == centroid])/members[centroid]
                            for k in range(1, len(self.data))]
                           for centroid in range(len(self.centroids))] 
-            
+        pprint.pprint(self.centroids)
         
     
     def assignPointToCluster(self, i):
@@ -205,7 +219,7 @@ class kClusterer:
             #
             if float(self.pointsChanged) / len(self.memberOf) <  0.01:
                 done = True
-        print("Final SSE: %f" % self.sse)
+        print("Final SSE: %f iteration number %d" % (self.sse, self.iterationNumber))
 
     def showMembers(self):
         """Display the results"""
@@ -218,6 +232,6 @@ class kClusterer:
 ##
 ## RUN THE K-MEANS CLUSTERER ON THE DOG DATA USING K = 3
 ###
-km = kClusterer('../../data/dogs.csv', 3)
+km = kClusterer('dogs.csv', 3)
 km.kCluster()
 km.showMembers()
