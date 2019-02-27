@@ -6,7 +6,7 @@
   - [Sharedptr](#sharedptr)
   - [Key words](#key-words)
   - [Concurrency](#concurrency)
-    - [Implement go's keyword using C++](#implement-gos-keyword-using-c)
+    - [Implementation of go's keyword using C++](#implementation-of-gos-keyword-using-c)
     - [Implementation of Thread Pool](#implementation-of-thread-pool)
     - [Implementation of simple TBB](#implementation-of-simple-tbb)
 
@@ -14,7 +14,7 @@
 # C++11 Notes
 
 ## General
-[The biggest changes in C++11]( https://blog.smartbear.com/c-plus-plus/the-biggest-changes-in-c11-and-why-you-should-care/)  
+[The biggest changes in C++11](https://smartbear.com/blog/develop/the-biggest-changes-in-c11-and-why-you-should-care/)  
 [A glimpse into C++14]( https://blog.smartbear.com/development/a-glimpse-into-c14/)  
 
 
@@ -40,7 +40,6 @@ boVector(const boVector && rhs) {
 
    overload(boVector&  v) { cout << "by lvalue."; }
    overload(boVector&& v) { cout << "by rvalue."; }
-
 ```
 
 - Why need std::forward
@@ -91,7 +90,7 @@ if (nullptr == input_file) {
 std::unique_ptr<char[]> read_buffer = std::unique_ptr<char[]>(new char[fsize]);
 ```
 
-- std::unique_ptr指定删除器的时候需要确定删除器的类型
+- std::unique_ptr 指定删除器的时候需要确定删除器的类型
 ```C++
 std::shared_ptr<int> ptr(new int(1),[](int* p){delete p}); //correct
  std::unique_ptr<int> ptr(new int(1),[](int* p){delete p}); //incorrect!
@@ -117,7 +116,7 @@ std::unique_ptr<int,std::function<void(int*)>> ptr(new int(1),[&](int* p){delete
 |std::nth_element ||[cppreference]( http://en.cppreference.com/w/cpp/algorithm/nth_element) [code snippet](http://cpp.sh/3axpc) |
 |Std::find_if|| [code snippet](http://cpp.sh/7jh47)|
 |Std::decay|Remove reference and const volatile(cv) |[example in OSRM](https://github.com/Project-OSRM/osrm-backend/blob/82b5648c97edf1d2edec7aecebc35aa8a8033c82/src/server/api/url_parser.cpp#L74)|
-|Std::result_of|拿一个可调用对象的返回值类型|[code snippet](http://cpp.sh/85qkt)|
+|Std::result_of|Obtain the result type of a call to fn <br/>拿一个可调用对象的返回值类型|[code snippet](http://cpp.sh/85qkt)|
 
 
 
@@ -131,7 +130,7 @@ std::unique_ptr<int,std::function<void(int*)>> ptr(new int(1),[&](int* p){delete
 |Promise&Future| std::promise is used by the "producer/writer" of the asynchronous operation. <br/>std::future is used by the "consumer/reader" of the asynchronous operation. |[code snippet](http://cpp.sh/4kr) <br/>[code snippet](http://cpp.sh/7gbd7)<br/> [code snippet](http://cpp.sh/865jm) <br/> [cppreference](http://en.cppreference.com/w/cpp/thread/promise/set_value) <br/><br/> [Concurrency in C++11 - promise, future and what's next](https://paoloseverini.wordpress.com/2014/04/07/concurrency-in-c11/) <br/> [Futures from Scratch]( https://github.com/CppCon/CppCon2015/blob/master/Tutorials/Futures%20from%20Scratch/Futures%20from%20Scratch%20-%20Arthur%20O'Dwyer%20-%20CppCon%202015.pdf) [video](https://www.youtube.com/watch?v=jfDRgnxDe7o&t=1031s) <br/> <br/> [github - twitter - promise impl in scala](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Promise.scala) <br/> [github - twitter future impl in scala](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Future.scala) <br/> [github - twiter - finagle futures](https://twitter.github.io/finagle/guide/Futures.html)|
 
 
-### Implement go's keyword using C++
+### Implementation of go's keyword using C++
 
 [github - slab - implementation of Future and channel ](https://github.com/stlab/libraries)  
 [github - libgo - 魅族科技](https://github.com/yyzybb537/libgo)
