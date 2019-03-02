@@ -101,6 +101,14 @@ std::unique_ptr<int,void(*)(int*)> ptr(new int(1),[&](int* p){delete p;}); //inc
 std::unique_ptr<int,std::function<void(int*)>> ptr(new int(1),[&](int* p){delete p;});
 ```
 
+- **Never dereferernce shared_ptr and then call obejct's interface**
+```C++
+auto& p = *returns_a_shard_ptr();
+// If you dereference shared_ptr to normal pointers, that means you given up protection from shared_ptr
+// When reference count of this shared_ptr becomes 0, the resource it holds will be destructed
+// Call interface from p is very dengerous and could possibly caused crash
+p.func();  
+```
 
 
 ## Key words
