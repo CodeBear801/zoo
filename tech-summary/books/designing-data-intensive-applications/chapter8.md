@@ -1,3 +1,9 @@
+<!-- TOC -->
+- [The Trouble with Distributed Systems](#the-trouble-with-distributed-systems)
+  - [Keywords](#keywords)
+  - [Questions](#questions)
+  - [Notes](#notes)
+
 # The Trouble with Distributed Systems
 
 ## Keywords
@@ -26,4 +32,5 @@
 - In designing a distributed system, one that is protected from Byzantine faults, you often need to design around causal dependency. You need to understand what a node knew when it made a decision, as that knowledge informs how you will heal any resulting divergence.
 - Vector clocks are an algorithm for this (e.g. Dynamo).
 An alterantive is preserving a total ordering of operations (e.g. MongoDB).
+
 
