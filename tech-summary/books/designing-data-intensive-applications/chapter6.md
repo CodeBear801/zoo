@@ -15,6 +15,7 @@
 
 ## Questions
 - What is partition, what's the difference & relation with replication?
+- When new machine are added, how to rebalance partition effectively?
 - Why need service discovering?  How etcd works?
 
 ## Notes
@@ -31,7 +32,7 @@
 | Type                    |Comments                    | Pros                          | Cons                          |
 |-------------------------------|:------------------------------|:------------------------------|:------------------------------|
 |Key Range|push contiguous strips of data to the same partitions|support efficient range queries|available only when the key can be sorted<br/> hot spots risk|
-|Key Hash|A good hashing function will uniformally distribute skewed data, "smudging" your data evenly across your partitions.|may distribute load more evenly|cannot use range queries|
+|Key Hash|A good hashing function will uniformly distribute skewed data, "smudging" your data evenly across your partitions.|may distribute load more evenly|cannot use range queries|
 <br/>
 
 
@@ -40,7 +41,7 @@ A secondary index usually doesn’t identify a record uniquely but rather is a w
 | Type                    |Index storage                    | Read                          | Write                          |
 |-------------------------------|:------------------------------|:------------------------------|:------------------------------|
 Document-partitioned|in the same partition as the primary key|scatter/gather across all partitions|write to only updated single partition|
-Term-partitioned|separately, using the indexed values|read can be served from a single partition|everal partition needs to be written
+Term-partitioned|separately, using the indexed values|read can be served from a single partition|everal partition needs to be written |
 
 - Example of Partitioning Secondary Indexes by Document  
 (A website for selling used cars. Each listing has a unique ID—call it the document ID—and you partition the database by the document ID.  We allow user to filter by color and by make, so need to build secondary index for them)  
@@ -57,7 +58,7 @@ The process of moving load from one node in the cluster to another is called reb
 2. While rebalancing is happening, the database should continue accepting reads and writes.
 3. No more data than necessary should be moved between nodes, to make rebalancing fast and to minimize the network and disk I/O load.
 
-**hash mod N** is the most simpiest way, but if the number of nodes N changes, most of the keys will need to be moved from one node to another.
+**hash mod N** is the most simplest way, but if the number of nodes N changes, most of the keys will need to be moved from one node to another.
 
 | Type                    |Comments                    | Add new node                          | Limitation                          | Real world example | 
 |-------------------------------|:------------------------------|:------------------------------|:------------------------------|:------------------------------|
