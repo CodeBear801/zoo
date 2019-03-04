@@ -9,6 +9,7 @@
     - [Implementation of go's keyword using C++](#implementation-of-gos-keyword-using-c)
     - [Implementation of Thread Pool](#implementation-of-thread-pool)
     - [Implementation of simple TBB](#implementation-of-simple-tbb)
+  - [Todo](#todo)
 
 
 # C++11 Notes
@@ -21,12 +22,12 @@
 
 ## Lvalue & Rvalue
  
-<img src="resource/pictures/c++lvalue_rvalue.png" alt="c++lvalue_rvalue" width="200"/>
+<img src="resource/pictures/c++lvalue_rvalue.png" alt="c++lvalue_rvalue" width="300"/>
 
 
 | Keyword                       | Notes                          | Reference |
 |-------------------------------|:------------------------------|:------------------------------|
-|| * lvalue or rvalue : Can you get the address <br/> * The most useful place for rvalue reference is overloading copy constructor and assignment operator, to achieve move semantics.<br/>* lvalue - An object that occupies some identifiable location in memory<br/> * rvalue - Any object that is not a lvalue <br/>* 1. Every C++ expression yield either an rvalue or a lvalue. <br/>* 2. If the expression has an identifiable memory address, it's lvalue; otherwise, rvalue.|* [code snippet](http://cpp.sh/9oz7) <br/> * [cppreference]( http://en.cppreference.com/mwiki/index.php?title=cpp/language/value_category&oldid=85137) <br/> * [Stroustrup - To move or not to move](http://www.stroustrup.com/move.pdf) <br/> * [Scott Meyers - Cppcon - Type Deduction and Why You Care](https://github.com/CppCon/CppCon2014/tree/master/Presentations/Type%20Deduction%20and%20Why%20You%20Care) [video](https://www.youtube.com/watch?v=wQxj20X-tIU) <br/><br/> * [C++11 Tutorial: Explaining the Ever-Elusive Lvalues and Rvalues](https://blog.smartbear.com/development/c11-tutorial-explaining-the-ever-elusive-lvalues-and-rvalues/) <br/> * [blog - move statement and perfect forward](https://codinfox.github.io/dev/2014/06/03/move-semantic-perfect-forward) <br/> * [Understanding lvalues and rvalues in C and C++](https://eli.thegreenplace.net/2011/12/15/understanding-lvalues-and-rvalues-in-c-and-c) <br/> <br/> * [stackoverflow - why stdmove and when should it be used for](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used?rq=1) <br/> * [stackoverflow - What are rvalues, lvalues, xvalues, glvalues, and prvalues? ](https://stackoverflow.com/questions/3601602/what-are-rvalues-lvalues-xvalues-glvalues-and-prvalues) <br/>* [stackoverflow  - What does T&& (double ampersand) mean in C++11?](https://stackoverflow.com/questions/5481539/what-does-t-double-ampersand-mean-in-c11)|
+|| * lvalue or rvalue : Can you get the address <br/> * The most useful place for rvalue reference is overloading copy constructor and assignment operator, to achieve move semantics.<br/>* lvalue - An object that occupies some identifiable location in memory<br/> * rvalue - Any object that is not a lvalue <br/>* 1. Every C++ expression yield either an rvalue or a lvalue. <br/>* 2. If the expression has an identifiable memory address, it's lvalue; otherwise, rvalue.|* [code snippet](http://cpp.sh/9oz7) <br/> * [cppreference]( http://en.cppreference.com/mwiki/index.php?title=cpp/language/value_category&oldid=85137) <br/> * [Stroustrup - To move or not to move](http://www.stroustrup.com/move.pdf) <br/> * [Scott Meyers - Cppcon - Type Deduction and Why You Care](https://github.com/CppCon/CppCon2014/tree/master/Presentations/Type%20Deduction%20and%20Why%20You%20Care) [video](https://www.youtube.com/watch?v=wQxj20X-tIU) <br/><br/> * [C++11 Tutorial: Explaining the Ever-Elusive Lvalues and Rvalues](https://blog.smartbear.com/development/c11-tutorial-explaining-the-ever-elusive-lvalues-and-rvalues/) <br/> * [blog - move statement and perfect forward](https://codinfox.github.io/dev/2014/06/03/move-semantic-perfect-forward) <br/> * [Understanding lvalues and rvalues in C and C++](https://eli.thegreenplace.net/2011/12/15/understanding-lvalues-and-rvalues-in-c-and-c) <br/> <br/> * [stackoverflow - why stdmove and when should it be used for](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used?rq=1) <br/> * [stackoverflow - What are rvalues, lvalues, xvalues, glvalues, and prvalues? ](https://stackoverflow.com/questions/3601602/what-are-rvalues-lvalues-xvalues-glvalues-and-prvalues) <br/>* [stackoverflow  - What does T&& (double ampersand) mean in C++11?](https://stackoverflow.com/questions/5481539/what-does-t-double-ampersand-mean-in-c11) <br/> * [stackoverflow - When to use std::forward to forward arguments?](https://stackoverflow.com/questions/7257144/when-to-use-stdforward-to-forward-arguments)|
 
 - Move constructor is particularly powerful where passing by reference and passing by value are both needed.  
 Move constructor give you finer control of which part of your object to be moved.
@@ -50,6 +51,13 @@ Template <typename T> void forwardValue(T& val) { processValue(val);} // change 
 
 Template <typename T> void forwardValue(const T& value) {processValue(val);} // change to const ref to left
 
+```
+- What is forward
+```C++
+template<class T>
+T&& forward(typename remove_reference<T>::type& arg) {
+  return static_cast<T&&>(arg);
+} 
 ```
 
 
@@ -152,3 +160,8 @@ p.func();
 [github - task impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/task.hpp#L43)  
 [github - ParallelForeach impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/parallel_algrithm.hpp#L11)
 
+
+
+## Todo
+- std::tuple
+- auto/decltype

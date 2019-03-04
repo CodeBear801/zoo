@@ -50,7 +50,7 @@ p[index] = value;
 
 
 - Memory leak/double free
--fsanitizer=address could help to detect it.  Or, **any place use new/delete directly, consider the reason for not using sharedptr**
+-fsanitizer=address could help to detect it.  Or, **any place using new/delete directly, you'd better have a better reason for not using sharedptr**
 
 - stack_use_after_return
 
@@ -196,7 +196,7 @@ shadow = 4 * (Addr & KMask)
 ```
 <img src="resource/pictures/tsan_shadow_cell.png" alt="tsan_shadow_cell" width="400"/>
 
-During running time, if thread with different thread id write overlapped position range, TA bucks. 
+During run-time, if **thread with different thread id write overlapped position range**, TA bucks. 
 
 ### Impact
 CPU: 4x - 10x, RAM: 5x - 8x
@@ -244,3 +244,4 @@ ccache, distcc
 - Refine TS, MS
 - Add UBS
 - CMake
+- gprofile
