@@ -40,7 +40,7 @@
 A secondary index usually doesn’t identify a record uniquely but rather is a way of searching for occurrences of a particular value: find all actions by user 123, find all articles containing the word hogwash, find all cars whose color is red, and so on.  The problem with secondary indexes is that they don’t map neatly to partitions. <br/>
 | Type                    |Index storage                    | Read                          | Write                          |
 |-------------------------------|:------------------------------|:------------------------------|:------------------------------|
-|Document-partitioned|in the same partition as the primary key|scatter/gather across all partitions|write to only updated single partition|
+|Document-partitioned|in the same partition as the primary key|scatter or gather across all partitions|write to only updated single partition|
 |Term-partitioned|separately, using the indexed values|read can be served from a single partition|everal partition needs to be written |
 
 - Example of Partitioning Secondary Indexes by Document  
