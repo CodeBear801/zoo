@@ -48,11 +48,11 @@ A secondary index usually doesn’t identify a record uniquely but rather is a w
 
 - Example of Partitioning Secondary Indexes by Document  
 (A website for selling used cars. Each listing has a unique ID—call it the document ID—and you partition the database by the document ID.  We allow user to filter by color and by make, so need to build secondary index for them)  
-<img src="resources/pictures/c6_Partitioning_Secondary_Indexes_by_Document.png" alt="c6_Partitioning_Secondary_Indexes_by_Document" width="400"/>  
+<img src="resources/pictures/c6_Partitioning_Secondary_Indexes_by_Document.png" alt="c6_Partitioning_Secondary_Indexes_by_Document" width="600"/>  
 
 
 - Example of Partitioning Secondary Indexes by Term  
-<img src="resources/pictures/c6_Partitioning_Secondary_Indexes_by_Term.png" alt="c6_Partitioning_Secondary_Indexes_by_Term" width="400"/>
+<img src="resources/pictures/c6_Partitioning_Secondary_Indexes_by_Term.png" alt="c6_Partitioning_Secondary_Indexes_by_Term" width="600"/>
 
 
 ### Rebalancing
@@ -69,7 +69,7 @@ The process of moving load from one node in the cluster to another is called reb
 |Dynamic partitioning | When a partition grows to exceed a configured size, it is split into two partitions so that approximately half of the data ends up on each side of the split. Conversely, if lots of data is deleted and a partition shrinks below some threshold, it can be merged with an adjacent partition.  | When a new node joins the cluster, it randomly chooses a fixed number of existing partitions to split, and then takes ownership of one half of each of those split partitions while leaving the other half of each partition in place. <br/> Partitions can stay on the same node after a split for a while, but will transfer over to a different node (snapshot operation).| It is ungainly when the datasets are small.| HBase - HDFS snapshotting |
 
 - Example of Fixed number of partitions  
-<img src="resources/pictures/c6_fixed_number_of_partition.png" alt="c6_fixed_number_of_partition.png" width="400"/>
+<img src="resources/pictures/c6_fixed_number_of_partition.png" alt="c6_fixed_number_of_partition.png" width="600"/>
 
 
 ### Service discovery
