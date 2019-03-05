@@ -31,14 +31,14 @@ Peter Snider recommends this aritical to me [15 rules for communicating at GitHu
         -  If old clients can't use the API after changes, bump the major version
 
 ```
-Good example could be: [OSRM-3408](https://github.com/Project-OSRM/osrm-backend/pull/3408)
+Good example could be: [OSRM-3408](https://github.com/Project-OSRM/osrm-backend/pull/3408), [ROCKSDB-3009](https://github.com/facebook/rocksdb/pull/3009), [Turfjs-832](https://github.com/Turfjs/turf/pull/832)
 
 
 
 ## More information
 - [How to keep your git commit history clean](https://about.gitlab.com/2018/06/07/keeping-git-commit-history-clean/)
-
-
+- [How GitHub Works: Be Asynchronous](https://zachholman.com/posts/how-github-works-asynchronous/)
+- [Learn the workings of Git, not just the commands](https://developer.ibm.com/tutorials/d-learn-workings-git/)
 
 
 
