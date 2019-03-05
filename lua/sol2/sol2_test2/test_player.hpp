@@ -1,3 +1,4 @@
+// From: https://sol2.readthedocs.io/en/latest/tutorial/cxx-in-lua.html
 
 struct player {
 public:

@@ -6,8 +6,6 @@
 
 int main()
 {
-    std::cout << "=== namespacing ===" << std::endl;
-    
     struct my_class
     {
         int b = 1;
