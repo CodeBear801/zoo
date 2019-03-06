@@ -16,7 +16,7 @@
     - [Internal](#internal-2)
     - [Impact](#impact-2)
   - [stacktrace](#stacktrace)
-  - [gprofie](#gprofie)
+  - [gperftools](#gperftools)
   - [CMake](#cmake)
 - [Reference](#reference)
 - [To do](#to-do)
@@ -223,10 +223,15 @@ Similar to AS, using shadow memory.
 2.5x slowdown, 2x memory overhead
 
 ## stacktrace
+If just needed for Linux system, just need call function of [backtrace](http://man7.org/linux/man-pages/man3/backtrace.3.html) and enable functionality only for Linux platform.  
+For multiple platform, we use [this one](https://github.com/CodeBear801/zoo/blob/6dcd33c37ae24f5523be0263bae70f9a7f0dceff/stacktrace/stacktrace.cpp#L460) implemented by Zexing Shi.  But please be aware that there always be compilation challenge on different platforms, I think use such class for 1~2 specific platform only might be more reasonable and maintainable.  
+```C++
+std::cout << ST();
+```
 
 
 
-## gprofie
+## gperftools
 
 
 ## CMake
@@ -244,4 +249,5 @@ ccache, distcc
 - Refine TS, MS
 - Add UBS
 - CMake
-- gprofile
+- gperftools
+- valgrind-memcheck
