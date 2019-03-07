@@ -1,5 +1,6 @@
 - [How to work in open source community](#how-to-work-in-open-source-community)
   - [Async communication](#async-communication)
+  - [Define rules for your project](#define-rules-for-your-project)
   - [How to creat a pull request](#how-to-creat-a-pull-request)
   - [More information](#more-information)
 
@@ -39,6 +40,13 @@ Email is a terrible, terrible collaboration medium.  It should typically reserve
 15. Don’t ping, just ask  
 
 
+## Define rules for your project
+Reference come from [robosat#contributing](https://github.com/mapbox/robosat#contributing)
+```
+- For non-trivial changes you should open a ticket first to outline and discuss ideas and implementation sketches. If you just send us a pull request with thousands of lines of changes we most likely won't accept your changeset.
+- We follow the 80/20 rule where 80% of the effects come from 20% of the causes: we strive for simplicity and maintainability over pixel-perfect results. If you can improve the model's accuracy by two percent points but have to add thousands of lines of code we most likely won't accept your changeset.
+- We take responsibility for changesets going into master: as soon as your changeset gets approved it is on us to maintain and debug it. If your changeset can not be tested, or maintained in the future by the core developers we most likely won't accept your changeset.
+```
 
 
 ## How to creat a pull request

@@ -12,7 +12,7 @@ Wednesday, March 6, 2019
 HCML steps  
 <img src="resources/imgs/human_ml_HCML_steps.png" alt="human_ml_HCML_steps" width="400"/>
 <br/>
-Additional information: Ranking bayes   
+Additional information: Ranking bayes 
 <img src="resources/imgs/huaman_ml_additional_information.png" alt="huaman_ml_additional_information" width="400"/>
 <br/>
 
