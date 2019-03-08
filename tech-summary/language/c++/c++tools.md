@@ -81,7 +81,8 @@ std::vector<int> func()
 auto v = func();
 // use v
 ```
-The use of v is safe after C++11 due the std::move's support for all STL containers.
+With C++11, std::vector has move-semantics, which means the local vector declared in your function will be moved on return and in some cases even the move can be elided by the compiler.<br/>
+Its preferred way in C++11 and efficient.  [stackoverflow](https://stackoverflow.com/questions/15704565/efficient-way-to-return-a-stdvector-in-c)
 
 ### Internal
 Inorder to know the status of memory usage, AS replace compiler's malloc and add poison bits to detect errors. <br/>
