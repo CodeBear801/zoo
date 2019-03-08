@@ -1,6 +1,7 @@
 <!-- TOC -->
 - [C++11 Notes](#c11-notes)
   - [General](#general)
+  - [Rules](#rules)
   - [Lvalue & Rvalue](#lvalue--rvalue)
   - [Lambda](#lambda)
   - [Tuple](#tuple)
@@ -9,7 +10,7 @@
   - [Other Key words](#other-key-words)
   - [Sharedptr](#sharedptr)
   - [Concurrency](#concurrency)
-    - [Coroutine/go](#coroutinego)
+    - [Coroutine/go style api](#coroutinego-style-api)
     - [Thread Pool](#thread-pool)
     - [Simple TBB](#simple-tbb)
 
@@ -20,6 +21,19 @@
 [The biggest changes in C++11](https://smartbear.com/blog/develop/the-biggest-changes-in-c11-and-why-you-should-care/)  
 [A glimpse into C++14]( https://blog.smartbear.com/development/a-glimpse-into-c14/)  
 
+## Rules
+1. Try to avoid FOR loops, see whether there is internal functions supported.  
+```C++
+using SourceSinkNodes = std::unordered_set<NodeID>;
+SourceSinkNodes source_nodes, sink_nodes;
+...
+const auto separated = std::find_if(source_nodes.begin(), source_nodes.end(), [&sink_nodes](const auto node) {
+            return sink_nodes.count(node);
+        }) == source_nodes.end();
+```
+2. Try to avoid new/delete, use make_shared/make_unique  
+3. Try to understand fundamental difference of lvalue/rvalue from previous version  
+4. Read excellent examples
 
 
 ## Lvalue & Rvalue
@@ -64,10 +78,24 @@ T&& forward(typename remove_reference<T>::type& arg) {
 More information please go to [C++ rvalue reference page](./c++11-rvalue-reference.md)
 
 ## Lambda
-Grammer
+- Grammar
 ```
 [capture clause] (parameters) -> return-type {body}
 ```
+- Example
+```C++
+auto addX = [=](int y) { return x + y; }; // capture local objects (local variables, parameters) in scope by value.
+addX(1); // == 2
+ 
+auto getXRef = [&]() -> int& { return x; }; // capture local objects (local variables, parameters) in scope by reference.
+getXRef(); // int& to `x`
+
+// By default, value-captures cannot be modified inside the lambda because the compiler-generated method is marked as const. 
+// The mutable keyword allows modifying captured variables. 
+auto f = [x] () mutable { x = 2; };   // Without mutable would be compilation error
+
+```
+
 | Keyword                       | Notes                          | Reference |
 |-------------------------------|:------------------------------|:------------------------------|
 ||[=] //capture all of the variables from the enclosing scope by value<br/>[&]//capture all of the variables from the enclosing scope by reference <br/>[this]//capture all of the data members of the enclosing class<br/>  // lamda help to pass context <br/>[this] pass by reference <br/>[*this] pass by copy |[code snippet](http://cpp.sh/4kofdf) <br/> [cppreference]( http://en.cppreference.com/w/cpp/language/lambda) <br/>  [C++11 tutorial lambda expressions the nuts and bolts of functional programming]( https://smartbear.com/blog/develop/c11-tutorial-lambda-expressions-the-nuts-and-bolts/) <br/> [Glennan Carnie - Demystifying C++ lambdas]( https://blog.feabhas.com/2014/03/demystifying-c-lambdas/) <br/> [University of Michigan - Handout - Using C++ Lambdas](http://umich.edu/~eecs381/handouts/Lambda.pdf) <br/>|
@@ -79,10 +107,17 @@ Grammer
 - [code snippet](http://cpp.sh/3pzjt) to print all values from tuple by template, another way is inheritance
 - Get value from tuple, suppose last value of a tuple is integer
 ```C++
-int len = std::get<1>(tp);                       // method 1
-int len = 0; std::tie(std::ignore, len) = tp;    // method 2
+int len = std::get<1>(tp);                       
+int len = 0; std::tie(std::ignore, len) = tp;   
 ```
 - When you want to return multiple objects and you can't find proper name for which, please don't define one-time use only structure for this but try with tuple instead.
+- Example
+```C++ 
+inline bool operator<(const OSMObject& lhs, const OSMObject& rhs) noexcept {
+    return const_tie(lhs.type(), lhs.id() > 0, lhs.positive_id(), lhs.version(), lhs.timestamp()) <
+           const_tie(rhs.type(), rhs.id() > 0, rhs.positive_id(), rhs.version(), rhs.timestamp());
+}
+```
 
 ## Parameter pack
 - Use template to unpack parameters: [code snippet](http://cpp.sh/6mmae)<br/>
@@ -122,6 +157,7 @@ std::result_of is an older version before decltype.  std::result_of could be imp
 
 | Keyword                       | Notes                          | Reference |
 |-------------------------------|:------------------------------|------------------------------:|
+|override & final|Overrides specifiy a virtual function overrides another vitual function. <br/> If the virtual funciton does not override a parendt's virtual function throw a compiler error.<br/> Final specifies that a virtual function cannot be overrridden in a derived class or that a class cannot be inherited from<br/>|[code snippet](http://cpp.sh/523s)|
 |default & delete||[code snippet](http://cpp.sh/542vn)|
 |std::initializer_list||[code snippet](http://cpp.sh/6zfao)|
 |Std::unordered_multimap||[code snippet]( http://cpp.sh/7bxf5)|
@@ -163,7 +199,7 @@ std::unique_ptr<char[]> read_buffer = std::unique_ptr<char[]>(new char[fsize]);
 - std::unique_ptr 指定删除器的时候需要确定删除器的类型
 ```C++
 std::shared_ptr<int> ptr(new int(1),[](int* p){delete p}); //correct
- std::unique_ptr<int> ptr(new int(1),[](int* p){delete p}); //incorrect!
+std::unique_ptr<int> ptr(new int(1),[](int* p){delete p}); //incorrect!
 
 std::unique_ptr<int,void(*)(int*)> ptr(new int(1),[](int* p){delete p;}); //correct
 std::unique_ptr<int,void(*)(int*)> ptr(new int(1),[&](int* p){delete p;}); //incorrect, capture variable
@@ -193,19 +229,19 @@ Don't get your hopes up.  There are two parts in shared_ptr, one is ref-count an
 |Promise&Future| std::promise is used by the "producer/writer" of the asynchronous operation. <br/>std::future is used by the "consumer/reader" of the asynchronous operation. |[code snippet](http://cpp.sh/4kr) <br/>[code snippet](http://cpp.sh/7gbd7)<br/> [code snippet](http://cpp.sh/865jm) <br/> [cppreference](http://en.cppreference.com/w/cpp/thread/promise/set_value) <br/><br/> [Concurrency in C++11 - promise, future and what's next](https://paoloseverini.wordpress.com/2014/04/07/concurrency-in-c11/) <br/> [Futures from Scratch]( https://github.com/CppCon/CppCon2015/blob/master/Tutorials/Futures%20from%20Scratch/Futures%20from%20Scratch%20-%20Arthur%20O'Dwyer%20-%20CppCon%202015.pdf) [video](https://www.youtube.com/watch?v=jfDRgnxDe7o&t=1031s) <br/> <br/> [github - twitter - promise impl in scala](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Promise.scala) <br/> [github - twitter future impl in scala](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Future.scala) <br/> [github - twiter - finagle futures](https://twitter.github.io/finagle/guide/Futures.html)|
 
 
-### Coroutine/go
-[github - libco - 微信](https://github.com/Tencent/libco)<br/>
-[github - slab - implementation of Future and channel ](https://github.com/stlab/libraries)<br/>
-[github - libgo - 魅族科技](https://github.com/yyzybb537/libgo)<br/>
-[github - coroutine-scheduler - Daniel](https://github.com/daniel-j-h/coroutine-scheduler)<br/>
+### Coroutine/go style api
+- [github - libco - 微信](https://github.com/Tencent/libco)<br/>
+- [github - slab - implementation of Future and channel ](https://github.com/stlab/libraries)<br/>
+- [github - libgo - 魅族科技](https://github.com/yyzybb537/libgo)<br/>
+- [github - coroutine-scheduler - Daniel](https://github.com/daniel-j-h/coroutine-scheduler)<br/>
 
 
 ### Thread Pool
-[github - simple C++11 thread pool impl](https://github.com/progschj/ThreadPool)<br/> 
-[github - thread-pool doc](https://github.com/mtrebi/thread-pool/blob/master/README.md#thread-pool)<br/>
+- [github - simple C++11 thread pool impl](https://github.com/progschj/ThreadPool)<br/> 
+- [github - thread-pool doc](https://github.com/mtrebi/thread-pool/blob/master/README.md#thread-pool)<br/>
 
 ### Simple TBB
-[github - task impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/task.hpp#L43)<br/>
-[github - ParallelForeach impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/parallel_algrithm.hpp#L11)<br/>
+- [github - task impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/task.hpp#L43) [test](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/unit_tests/engine/task_test.cpp#L1)<br/>
+- [github - ParallelForeach impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/parallel_algrithm.hpp#L11) [test](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/unit_tests/engine/parallel_algorithm_test.cpp#L10)<br/>
 
 
