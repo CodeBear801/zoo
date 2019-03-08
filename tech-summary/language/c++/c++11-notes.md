@@ -9,9 +9,9 @@
   - [Other Key words](#other-key-words)
   - [Sharedptr](#sharedptr)
   - [Concurrency](#concurrency)
-    - [Implementation of go's keyword using C++](#implementation-of-gos-keyword-using-c)
-    - [Implementation of Thread Pool](#implementation-of-thread-pool)
-    - [Implementation of simple TBB](#implementation-of-simple-tbb)
+    - [Coroutine/go](#coroutinego)
+    - [Thread Pool](#thread-pool)
+    - [Simple TBB](#simple-tbb)
 
 
 # C++11 Notes
@@ -193,19 +193,19 @@ Don't get your hopes up.  There are two parts in shared_ptr, one is ref-count an
 |Promise&Future| std::promise is used by the "producer/writer" of the asynchronous operation. <br/>std::future is used by the "consumer/reader" of the asynchronous operation. |[code snippet](http://cpp.sh/4kr) <br/>[code snippet](http://cpp.sh/7gbd7)<br/> [code snippet](http://cpp.sh/865jm) <br/> [cppreference](http://en.cppreference.com/w/cpp/thread/promise/set_value) <br/><br/> [Concurrency in C++11 - promise, future and what's next](https://paoloseverini.wordpress.com/2014/04/07/concurrency-in-c11/) <br/> [Futures from Scratch]( https://github.com/CppCon/CppCon2015/blob/master/Tutorials/Futures%20from%20Scratch/Futures%20from%20Scratch%20-%20Arthur%20O'Dwyer%20-%20CppCon%202015.pdf) [video](https://www.youtube.com/watch?v=jfDRgnxDe7o&t=1031s) <br/> <br/> [github - twitter - promise impl in scala](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Promise.scala) <br/> [github - twitter future impl in scala](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Future.scala) <br/> [github - twiter - finagle futures](https://twitter.github.io/finagle/guide/Futures.html)|
 
 
-### Implementation of go's keyword using C++
-[github - libco - 微信](https://github.com/Tencent/libco)
-[github - slab - implementation of Future and channel ](https://github.com/stlab/libraries)  
-[github - libgo - 魅族科技](https://github.com/yyzybb537/libgo)
-[github - coroutine-scheduler - Daniel](https://github.com/daniel-j-h/coroutine-scheduler)
+### Coroutine/go
+[github - libco - 微信](https://github.com/Tencent/libco)<br/>
+[github - slab - implementation of Future and channel ](https://github.com/stlab/libraries)<br/>
+[github - libgo - 魅族科技](https://github.com/yyzybb537/libgo)<br/>
+[github - coroutine-scheduler - Daniel](https://github.com/daniel-j-h/coroutine-scheduler)<br/>
 
 
-### Implementation of Thread Pool
-[github - simple C++11 thread pool impl](https://github.com/progschj/ThreadPool)  
-[github - thread-pool doc](https://github.com/mtrebi/thread-pool/blob/master/README.md#thread-pool)
+### Thread Pool
+[github - simple C++11 thread pool impl](https://github.com/progschj/ThreadPool)<br/> 
+[github - thread-pool doc](https://github.com/mtrebi/thread-pool/blob/master/README.md#thread-pool)<br/>
 
-### Implementation of simple TBB
-[github - task impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/task.hpp#L43)  
-[github - ParallelForeach impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/parallel_algrithm.hpp#L11)
+### Simple TBB
+[github - task impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/task.hpp#L43)<br/>
+[github - ParallelForeach impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/parallel_algrithm.hpp#L11)<br/>
 
 
