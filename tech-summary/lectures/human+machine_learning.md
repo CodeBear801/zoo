@@ -1,8 +1,8 @@
 # Human + Machine Learning
 
-Wednesday, March 6, 2019
-7:10--7:50: Human + Machine Learning - Mike Wolfson
-@Google Cloud
+Wednesday, March 6, 2019<br/>
+7:10--7:50: Human + Machine Learning - Mike Wolfson<br/>
+@Google Cloud<br/>
 
 ## Notes
 - [Human-Centered Machine Learning](https://medium.com/google-design/human-centered-machine-learning-a770d10562cd)

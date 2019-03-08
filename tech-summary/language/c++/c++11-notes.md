@@ -3,13 +3,15 @@
   - [General](#general)
   - [Lvalue & Rvalue](#lvalue--rvalue)
   - [Lambda](#lambda)
+  - [Tuple](#tuple)
+  - [Parameter pack](#parameter-pack)
+  - [auto & decltype](#auto--decltype)
+  - [Other Key words](#other-key-words)
   - [Sharedptr](#sharedptr)
-  - [Key words](#key-words)
   - [Concurrency](#concurrency)
     - [Implementation of go's keyword using C++](#implementation-of-gos-keyword-using-c)
     - [Implementation of Thread Pool](#implementation-of-thread-pool)
     - [Implementation of simple TBB](#implementation-of-simple-tbb)
-  - [Todo](#todo)
 
 
 # C++11 Notes
@@ -59,7 +61,7 @@ T&& forward(typename remove_reference<T>::type& arg) {
   return static_cast<T&&>(arg);
 } 
 ```
-
+More information please go to [C++ rvalue reference page](./c++11-rvalue-reference.md)
 
 ## Lambda
 Grammer
@@ -71,6 +73,66 @@ Grammer
 ||[=] //capture all of the variables from the enclosing scope by value<br/>[&]//capture all of the variables from the enclosing scope by reference <br/>[this]//capture all of the data members of the enclosing class<br/>  // lamda help to pass context <br/>[this] pass by reference <br/>[*this] pass by copy |[code snippet](http://cpp.sh/4kofdf) <br/> [cppreference]( http://en.cppreference.com/w/cpp/language/lambda) <br/>  [C++11 tutorial lambda expressions the nuts and bolts of functional programming]( https://smartbear.com/blog/develop/c11-tutorial-lambda-expressions-the-nuts-and-bolts/) <br/> [Glennan Carnie - Demystifying C++ lambdas]( https://blog.feabhas.com/2014/03/demystifying-c-lambdas/) <br/> [University of Michigan - Handout - Using C++ Lambdas](http://umich.edu/~eecs381/handouts/Lambda.pdf) <br/>|
 |std::bind||[code snippet](http://cpp.sh/6urbc)| 
 |Std::function|const std::function<void(int)>& f|[code snippet](http://cpp.sh/6bcdz)|
+
+
+## Tuple
+- [code snippet](http://cpp.sh/3pzjt) to print all values from tuple by template, another way is inheritance
+- Get value from tuple, suppose last value of a tuple is integer
+```C++
+int len = std::get<1>(tp);                       // method 1
+int len = 0; std::tie(std::ignore, len) = tp;    // method 2
+```
+- When you want to return multiple objects and you can't find proper name for which, please don't define one-time use only structure for this but try with tuple instead.
+
+## Parameter pack
+- Use template to unpack parameters: [code snippet](http://cpp.sh/6mmae)<br/>
+  Different way to write terminate function: [code snippet](http://cpp.sh/9rc5)
+  For these two way, both of them using recursion to unpack parameters, there must be a **terminate function**
+- If you use `,` and initialization list then would be easier to write [code snippet](http://cpp.sh/5676q7)
+
+## auto & decltype
+- Whether const auto = auto const?  I think so based on this [stackoverflow-Is 'auto const' and 'const auto' the same?](https://stackoverflow.com/questions/10709897/is-auto-const-and-const-auto-the-same)  
+There are people recommand write const volatile infront of auto to avoid auto type deduction
+```C++
+const volatile auto coeffarr={3.6666667, 2.65, 1.3333}; //const volatile double[]
+```
+- Decltype deduces the type of an expression
+```C++
+template <class T>
+auto get_value_by_key(T const &object, const char *key) -> decltype(object.get_value_by_key(key))
+```
+std::result_of is an older version before decltype.  std::result_of could be implemented by Decltype and Decltypecould always make code simpler. <br/> [stackoverflow - Difference between std::result_of and decltype](https://stackoverflow.com/questions/2689709/difference-between-stdresult-of-and-decltype)
+```C++
+  template<typename _Signature>
+    class result_of;
+
+  template<typename _Functor, typename... _ArgTypes>
+    struct result_of<_Functor(_ArgTypes...)>
+    {
+      typedef
+        decltype( std::declval<_Functor>()(std::declval<_ArgTypes>()...) )
+        type;
+    };
+```
+[OSRM - decltype example](https://github.com/Telenav/osrm-backend/blob/016adf6439433929ed5c6fd1272aee00d32f8ec1/include/partitioner/reorder_first_last.hpp#L37)
+- std::result_of Deduces the return type of an INVOKE expression at compile time. [code snippet](http://cpp.sh/85qkt)
+
+## Other Key words
+
+
+| Keyword                       | Notes                          | Reference |
+|-------------------------------|:------------------------------|------------------------------:|
+|default & delete||[code snippet](http://cpp.sh/542vn)|
+|std::initializer_list||[code snippet](http://cpp.sh/6zfao)|
+|Std::unordered_multimap||[code snippet]( http://cpp.sh/7bxf5)|
+|std::copy_if||[code snippet](http://cpp.sh/8tre)|
+|std::adjacent_find|check the two element which is near to each other|[code snippet]( http://cpp.sh/4h2a4)|
+|std::nth_element ||[cppreference]( http://en.cppreference.com/w/cpp/algorithm/nth_element) [code snippet](http://cpp.sh/3axpc) |
+|Std::find_if|| [code snippet](http://cpp.sh/7jh47)|
+|Std::decay|Remove reference and const volatile(cv) |[example in OSRM](https://github.com/Project-OSRM/osrm-backend/blob/82b5648c97edf1d2edec7aecebc35aa8a8033c82/src/server/api/url_parser.cpp#L74)|
+|Std::result_of|Obtain the result type of a call to fn <br/>拿一个可调用对象的返回值类型|[code snippet](http://cpp.sh/85qkt)|
+|std::bind|The example of bind multiple functor with std::bind->|[code snippet](http://cpp.sh/542vn)|
+|std::function|const std::function<void(int)>& f|[code snippet](cpp.sh/6bcdz)|
 
 
 
@@ -118,23 +180,8 @@ auto& p = *returns_a_shard_ptr();
 p.func();  
 ```
 
-
-## Key words
-
-
-| Keyword                       | Notes                          | Reference |
-|-------------------------------|:------------------------------|------------------------------:|
-|default & delete||[code snippet](http://cpp.sh/542vn)|
-|std::initializer_list||[code snippet](http://cpp.sh/6zfao)|
-|Std::unordered_multimap||[code snippet]( http://cpp.sh/7bxf5)|
-|std::copy_if||[code snippet](http://cpp.sh/8tre)|
-|std::adjacent_find|check the two element which is near to each other|[code snippet]( http://cpp.sh/4h2a4)|
-|std::nth_element ||[cppreference]( http://en.cppreference.com/w/cpp/algorithm/nth_element) [code snippet](http://cpp.sh/3axpc) |
-|Std::find_if|| [code snippet](http://cpp.sh/7jh47)|
-|Std::decay|Remove reference and const volatile(cv) |[example in OSRM](https://github.com/Project-OSRM/osrm-backend/blob/82b5648c97edf1d2edec7aecebc35aa8a8033c82/src/server/api/url_parser.cpp#L74)|
-|Std::result_of|Obtain the result type of a call to fn <br/>拿一个可调用对象的返回值类型|[code snippet](http://cpp.sh/85qkt)|
-
-
+- **Is shared_ptr thread safe?**  
+Don't get your hopes up.  There are two parts in shared_ptr, one is ref-count and another is the pointer it points to.  If there is no protection who could gurantee the safeness of the pointer?
 
 ## Concurrency
 
@@ -147,9 +194,10 @@ p.func();
 
 
 ### Implementation of go's keyword using C++
-
+[github - libco - 微信](https://github.com/Tencent/libco)
 [github - slab - implementation of Future and channel ](https://github.com/stlab/libraries)  
 [github - libgo - 魅族科技](https://github.com/yyzybb537/libgo)
+[github - coroutine-scheduler - Daniel](https://github.com/daniel-j-h/coroutine-scheduler)
 
 
 ### Implementation of Thread Pool
@@ -161,7 +209,3 @@ p.func();
 [github - ParallelForeach impl](https://github.com/CodeBear801/zoo/blob/eee7b107f3e3909c837538b60aa691aa78eba15f/concurrency/tbb_simple/include/parallel_algrithm.hpp#L11)
 
 
-
-## Todo
-- std::tuple
-- auto/decltype
