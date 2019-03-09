@@ -6,6 +6,7 @@
     - [Unreliable Networks](#unreliable-networks)
     - [Unreliable Clocks](#unreliable-clocks)
       - [why clock matters](#why-clock-matters)
+      - [Types](#types)
       - [Problems](#problems)
   - [Byzantine fault](#byzantine-fault)
 
@@ -33,20 +34,38 @@
 1. Node-to node communication always has delay, it hard to know the sequence
 2. Clock on each machine is not accurate
 
+#### Types
+
 type | description | Example
 ---|:---|:---
 time-of-day clock | Its what you intuitively expect of a clock: it returns the current date and time according to some calendar (also known as wall-clock time). <br/> Can move backwards or stop in time| 
 monotonic clock | Its suitable for measuring a duration (time interval) | Java: System.nanoTime
 
 #### Problems
+- Unsync clock will fail LWW
+
+<img src="resources/pictures/c8_lww_issue.png" alt="c8_lww_issue" width="600"/>  
 
 
+- Process pause
+Say you have a database with a single leader per partition. Only the leader is allowed to accept writes. How does a node know that it is still leader, and that it may safely accept writes?  
+Only the leader is allowed to accept writes. Only one node can hold the lease at any one time—thus, when a node obtains a lease, it knows that it is the leader for some amount of time, until the lease expires.  
+```java
+while (true) {
+    request = getIncomingRequest();
+    // Ensure that the lease always has at least 10 seconds remaining
+    if (lease.expiryTimeMillis - System.currentTimeMillis() < 10000) { 
+        lease = lease.renew();
+    }
+    if (lease.isValid()) { 
+        process(request);
+    } 
+}
+```
+The code assumes that very little time passes between the point that it checks the time (System.currentTimeMillis()) and the time when the request is processed (process(request)).  However, what if there is an unexpected pause in the execution of the program? For example, imagine the thread stops for 15 seconds around the line lease.isValid() before finally continuing. In that case, it’s likely that the lease will have expired by the time the request is processed, and another node has already taken over as leader.<br/>
+GC, Virtual Machine suspend and write currnt process into disk, SIGSTOP for current process, visit data over network, all of them will cause long pause.<br/>
 
-- Modern computers have both a time-of-day clock and a monotonic clock. The former is a user-facing clock that can move backwards or stop in time. The latter is a constantly forward-propagating clock, but only the difference between values is meaningful; its absolute magnitude is meaningless.
-- Both clocks are ruled over by NTP synchronization, when the computer is online.
-- These clocks are quartz-based, and subject to approximately 35 ms average errors.
-- Furthermore, processes may pause for arbitrarily long periods of time due to things like garbage collection and context switches.
-- Things that depend on timeouts, like creating a global log in a distributed system (databases) or expiring leader-given leases (GFS), must account for this possibility.  You can omit these delays if you try hard enough. Systems like flight controls and airbags operate are hard real-time systems that do so. But these are really, really hard to build, and highly limiting.  Algorithms can be proven to work correctly in a given an unreliable system model. But you have to choose your model carefully.
+- Things that depend on timeouts, like creating a global log in a distributed system (databases) or expiring leader-given leases (GFS), must account for failure possibility.  You can omit these delays if you try hard enough. Systems like flight controls and airbags operate are hard real-time systems that do so. But these are really, really hard to build, and highly limiting.  Algorithms can be proven to work correctly in a given an unreliable system model. But you have to choose your model carefully.
 - A point that [Jepsen](https://github.com/jepsen-io/jepsen) makes: these algorithms are hard to implement in a durable way. The theory is far ahead of the practice, but a lot of architects try to homegrow their conflict resolution, which is problematic.
 
 ## Byzantine fault
