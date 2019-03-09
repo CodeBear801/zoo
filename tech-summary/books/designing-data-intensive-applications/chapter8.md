@@ -17,11 +17,11 @@
 ## Questions
 - Monotonic Versus Time-of-Day Clocks
 - Why Google provide Spanner True data API
-- 
+
 
 ## Notes
 - Computers are designed to fail all at once and catastrophically.  
-- Distributed services are fundamentally different. They need to fail only **partially**, if possible, in order to allow as many services as possible to continue to operate.  This unlocks a lot of additional failure modes, partial failures, which are both hard to understand and hard to reason about.
+- Distributed services are fundamentally different. They need to fail only **partially**, if possible, in order to allow as many services as possible to continue to operate.  This unlocks a lot of additional failure modes, partial failures, which are both hard to understand and hard to reason about.<br/>
 1. Detect failure: Timeout.  But timeout could not tell its node failover or network partition
 2. Tolerant failure: Send message to other nodes and use consensus algorithm to make decision
 
@@ -44,7 +44,7 @@ monotonic clock | Its suitable for measuring a duration (time interval) | Java: 
 #### Problems
 - Unsync clock will fail LWW
 
-<img src="resources/pictures/c8_lww_issue.png" alt="c8_lww_issue" width="600"/>  
+<img src="resources/pictures/ddia_c8_lww_issue.png" alt="c8_lww_issue" width="600"/>  
 
 
 - Process pause
@@ -70,7 +70,7 @@ GC, Virtual Machine suspend and write currnt process into disk, SIGSTOP for curr
 
 ## Byzantine fault
 If a node sends an knowingly untrue message to another node, this is known as a Byzantine fault.  Byzantine faults must be addressed in the design of public distributed systems, like the Internet or blockchain. But they can be ignored in the design of a service system, as obviously you will not purposefully lie to yourself.  
-In designing a distributed system, one that is protected from Byzantine faults, you often need to design around causal dependency. You need to understand **what a node knew when it made a decision**, as that knowledge informs how you will heal any resulting divergence.  
+In designing a distributed system, one that is protected from Byzantine faults, you often need to design around causal dependency. You need to understand **what a node knew when it made a decision**, as that knowledge informs how you will heal any resulting divergence.   
 Vector clocks are an algorithm for this (e.g. Dynamo).  
 An alterantive is preserving a total ordering of operations (e.g. MongoDB).  
 

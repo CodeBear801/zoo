@@ -120,7 +120,7 @@ One way of achieving monotonic reads is to make sure that each user always makes
 #### Consistent Prefix Reads
 Replication lag anomalies concerns violation of causality.  
 
-<img src="resources/pictures/c5_replication_consistent_prefix_reads.png" alt="c5_replication_consistent_prefix_reads" width="600"/>  
+<img src="resources/pictures/ddia_c5_replication_consistent_prefix_reads.png" alt="c5_replication_consistent_prefix_reads" width="600"/>  <br/>
 
 Consistent Prefix Reads(一致前缀读) guarantee says that if a sequence of writes happens in a certain order, then anyone reading those writes will see them appear in the same order.  
 In Kafka, if you want to gurantee the sequence of two message, you need to make sure they are in the same partition.  
@@ -160,7 +160,7 @@ However, even with w + r > n, there are likely to be edge cases where stale valu
 - Even if everything is working correctly, there are edge cases in which you can get unlucky with the timing. See “Linearizability and quorums”
 
 ### Happens-before
-<img src="resources/pictures/c5_replication_capturing_the_happens_before_relation.png" alt="c5_replication_capturing_the_happens_before_relation" width="600"/> <br/> 
+<img src="resources/pictures/ddia_c5_replication_capturing_the_happens_before_relation.png" alt="c5_replication_capturing_the_happens_before_relation" width="600"/> <br/> 
 数据库为每个key创建版本号，每次变更都会增加版本号，把写入的值和新版本号一起存储<br/>
 客户端读取时，服务端返回key最新的版本号以及所有的值。客户端在写入前必须先读取<br/>
 客户端写入时，要带上之前读取的版本号，并且把之前读到的值与新的值做一个merge操作<br/>
