@@ -5,7 +5,9 @@
   - [Lvalue & Rvalue](#lvalue--rvalue)
   - [Lambda](#lambda)
   - [Tuple](#tuple)
-  - [Parameter pack](#parameter-pack)
+  - [Traits](#traits)
+    - [enable_if](#enableif)
+    - [Parameter pack](#parameter-pack)
   - [auto & decltype](#auto--decltype)
   - [Other Key words](#other-key-words)
   - [Sharedptr](#sharedptr)
@@ -119,7 +121,27 @@ inline bool operator<(const OSMObject& lhs, const OSMObject& rhs) noexcept {
 }
 ```
 
-## Parameter pack
+## Traits
+
+### enable_if
+enable_if is a compile-time switch for templates, which will check at compilation time and provide more protection.  
+http://cpp.sh/93kbw<br/>
+
+http://cpp.sh/94333 <br/>
+
+http://cpp.sh/5ijga<br/>
+
+https://onlinegdb.com/BkKPsm4wE<br/>
+
+https://eli.thegreenplace.net/2014/sfinae-and-enable_if/<br/>
+Substitution failure is not an error<br/>
+
+https://stackoverflow.com/questions/11055923/stdenable-if-parameter-vs-template-parameter<br/>
+https://stackoverflow.com/questions/14600201/why-should-i-avoid-stdenable-if-in-function-signatures/14623831<br/>
+https://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function?lq=1<br/>
+
+
+### Parameter pack
 - Use template to unpack parameters: [code snippet](http://cpp.sh/6mmae)<br/>
   Different way to write terminate function: [code snippet](http://cpp.sh/9rc5)
   For these two way, both of them using recursion to unpack parameters, there must be a **terminate function**
