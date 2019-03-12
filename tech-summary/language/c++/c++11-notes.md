@@ -201,7 +201,11 @@ T foo(T && t,
 ```
 4. https://eli.thegreenplace.net/2014/sfinae-and-enable_if/<br/>
 
-5. More information<br/>
+5. Examples  
+[OSMIUM - enable_if check template parameter](https://github.com/Telenav/osrm-backend/blob/016adf6439433929ed5c6fd1272aee00d32f8ec1/third_party/libosmium/include/osmium/tags/matcher.hpp#L84)   
+[OSRM - enable_if check function parameter](https://github.com/Telenav/osrm-backend/blob/016adf6439433929ed5c6fd1272aee00d32f8ec1/include/util/filtered_integer_range.hpp#L94)  
+
+6. More information<br/>
 [stackoverflow - Why should I avoid std::enable_if in function signatures](https://stackoverflow.com/questions/14600201/why-should-i-avoid-stdenable-if-in-function-signatures/14623831)<br/>
 [stackoverflow - std::enable_if to conditionally compile a member function](https://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function)<br/>
 [stackoverflow - std::enable_if : parameter vs template parameter](https://stackoverflow.com/questions/11055923/stdenable-if-parameter-vs-template-parameter) <br/>
