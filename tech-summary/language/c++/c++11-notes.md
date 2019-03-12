@@ -123,7 +123,7 @@ inline bool operator<(const OSMObject& lhs, const OSMObject& rhs) noexcept {
 
 ## Traits
 
-### enable_if
+### enable_if  
 enable_if is a compile-time switch for templates, which will check at compilation time and provide more protection.  
 - Below is a simple case for demoing two way of using enable_if [code snippet](http://cpp.sh/93kbw)
 ```C++
