@@ -125,20 +125,88 @@ inline bool operator<(const OSMObject& lhs, const OSMObject& rhs) noexcept {
 
 ### enable_if
 enable_if is a compile-time switch for templates, which will check at compilation time and provide more protection.  
-http://cpp.sh/93kbw<br/>
+- Below is a simple case for demoing two way of using enable_if [code snippet](http://cpp.sh/93kbw)
+```C++
+// 1. the return type (bool) is only valid if T is an integral type:
+template <class T>
+typename std::enable_if<std::is_integral<T>::value,bool>::type
+is_odd (T i) {return bool(i%2);}
 
-http://cpp.sh/94333 <br/>
+// 2. the second template argument is only valid if T is an integral type:
+template < class T,
+           class = typename std::enable_if<std::is_integral<T>::value>::type>
+bool is_even (T i) {return !bool(i%2);}
+```
 
-http://cpp.sh/5ijga<br/>
+- Inside template class, as function parameter, template parameter or return type[code snippet](http://cpp.sh/5ijga)
+```C++
+template<typename T>
+struct Check1
+{
+   template<typename U = T>
+   U read(typename std::enable_if<
+          std::is_same<U, int>::value >::type* = 0) { return 42; }
 
-https://onlinegdb.com/BkKPsm4wE<br/>
+   template<typename U = T>
+   U read(typename std::enable_if<
+          std::is_same<U, double>::value >::type* = 0) { return 3.14; }   
+};
+template<typename T>
+struct Check2
+{
+   template<typename U = T, typename std::enable_if<
+            std::is_same<U, int>::value, int>::type = 0>
+   U read() { return 42; }
+   // ...
+}
 
-https://eli.thegreenplace.net/2014/sfinae-and-enable_if/<br/>
-Substitution failure is not an error<br/>
+template<typename T>
+struct Check3
+{
+   template<typename U = T>
+   typename std::enable_if<std::is_same<U, int>::value, U>::type read() {
+      return 42;
+   }
+   // ...
+}
+```
+Take away:
+1. The main purpose of std::enable_if is providing a way to limit types could be pass into a template class.    
+  Take the upper case as an example, without enable_if limitation, we define Check1<Any type>, but almost for all situation, this is not what we want.  Our logic might just expect its either int or double, if pass string into then could trigger compilation error  
+2. The purpose of `::type* = 0` is just given a default value for type, so you don't need parameters to call this function
+   For example, you could write check1_obj.read() or check1_obj.read(&variable); You could find experiments here [code snippet](http://cpp.sh/8tvjm)  
+3. enable_if always used for such situation, for passing type in certain condition, go to one kind of operation, others go to differernt operation.  [code snippet](http://cpp.sh/25xnx) [stackoverflow](https://stackoverflow.com/questions/29040059/enable-if-to-add-a-function-parameter-that-has-a-default-argument)
+```C++
+/*
+you wish to write multiple overloads of the function template with different behaviours that are controlled by one or more of the template arguments. Then, by replacing your_condition with a condition expressing an appropriate requirement on the template argument(s), you can enlist the SFINAE principle to select the specific overload that you want to be instantiated for given template arguments.
 
-https://stackoverflow.com/questions/11055923/stdenable-if-parameter-vs-template-parameter<br/>
-https://stackoverflow.com/questions/14600201/why-should-i-avoid-stdenable-if-in-function-signatures/14623831<br/>
-https://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function?lq=1<br/>
+The SFINAE parameter - let's call it that - is unused by the instantiated function; it exists solely to provoke SFINAE in function template overload resolution. Hence it can be nameless, and hence it must be defaulted: it must not force you to provide an additional, useless, argument when you invoke the function template.
+*/
+
+template <typename T>
+T foo(T && t, 
+    typename std::enable_if<std::is_same<T,int>::value, void **>::type = nullptr)
+{
+    std::cout << "Doubling " << t << " gives " << (t + t) << std::endl;
+    return t + t; 
+}
+
+template <typename T>
+T foo(T && t, 
+    typename std::enable_if<!std::is_same<T,int>::value, void **>::type = nullptr)
+{
+    std::cout << "Squaring " << t << " gives " << (t * t) << std::endl;
+    return t * t; 
+}
+```
+4. https://eli.thegreenplace.net/2014/sfinae-and-enable_if/<br/>
+
+5. More information<br/>
+[stackoverflow - Why should I avoid std::enable_if in function signatures](https://stackoverflow.com/questions/14600201/why-should-i-avoid-stdenable-if-in-function-signatures/14623831)<br/>
+[stackoverflow - std::enable_if to conditionally compile a member function](https://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function)<br/>
+[stackoverflow - std::enable_if : parameter vs template parameter](https://stackoverflow.com/questions/11055923/stdenable-if-parameter-vs-template-parameter) <br/>
+[SFINAE - Substitution failure is not an error](https://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error)<br/>
+[C++11新特性--std::enable_if和SFINAE](https://www.jianshu.com/p/a961c35910d2)
 
 
 ### Parameter pack
