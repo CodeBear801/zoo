@@ -178,9 +178,16 @@ Take away:
 3. enable_if always used for such situation, for passing type in certain condition, go to one kind of operation, others go to differernt operation.  [code snippet](http://cpp.sh/25xnx) [stackoverflow](https://stackoverflow.com/questions/29040059/enable-if-to-add-a-function-parameter-that-has-a-default-argument)
 ```C++
 /*
-you wish to write multiple overloads of the function template with different behaviours that are controlled by one or more of the template arguments. Then, by replacing your_condition with a condition expressing an appropriate requirement on the template argument(s), you can enlist the SFINAE principle to select the specific overload that you want to be instantiated for given template arguments.
+you wish to write multiple overloads of the function template with different behaviours that are 
+controlled by one or more of the template arguments. Then, by replacing your_condition with a 
+condition expressing an appropriate requirement on the template argument(s), you can enlist the 
+SFINAE principle to select the specific overload that you want to be instantiated for given 
+template arguments.
 
-The SFINAE parameter - let's call it that - is unused by the instantiated function; it exists solely to provoke SFINAE in function template overload resolution. Hence it can be nameless, and hence it must be defaulted: it must not force you to provide an additional, useless, argument when you invoke the function template.
+The SFINAE parameter - let's call it that - is unused by the instantiated function; it exists 
+solely to provoke SFINAE in function template overload resolution. Hence it can be nameless, 
+and hence it must be defaulted: it must not force you to provide an additional, useless, argument 
+when you invoke the function template.
 */
 
 template <typename T>
