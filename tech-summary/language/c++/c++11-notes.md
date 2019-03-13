@@ -138,7 +138,7 @@ template < class T,
 bool is_even (T i) {return !bool(i%2);}
 ```
 
-- Inside template class, as function parameter, template parameter or return type[code snippet](http://cpp.sh/5ijga)
+- Inside template class, enable_if could apply to function parameter, template parameter or return type[code snippet](http://cpp.sh/5ijga)
 ```C++
 template<typename T>
 struct Check1
@@ -172,8 +172,9 @@ struct Check3
 ```
 Take away:
 1. The main purpose of std::enable_if is providing a way to limit types could be pass into a template class.    
-  Take the upper case as an example, without enable_if limitation, we define Check1<Any type>, but almost for all situation, this is not what we want.  Our logic might just expect its either int or double, if pass string into then could trigger compilation error  
-2. The purpose of `::type* = 0` is just given a default value for type, so you don't need parameters to call this function
+  Take the upper case as an example, without enable_if limitation, we define Check1<Any type>, but almost for all situation, this is not what we want.  Our logic might just expect its either int or double, if pass string into then could trigger compilation error.<br/>  
+  
+2. The purpose of `::type* = 0` is just given a default value for type, so you don't need parameters to call this function.<br/>
    For example, you could write check1_obj.read() or check1_obj.read(&variable); You could find experiments here [code snippet](http://cpp.sh/8tvjm)  
 3. enable_if always used for such situation, for passing type in certain condition, go to one kind of operation, others go to differernt operation.  [code snippet](http://cpp.sh/25xnx) [stackoverflow](https://stackoverflow.com/questions/29040059/enable-if-to-add-a-function-parameter-that-has-a-default-argument)
 ```C++
@@ -232,6 +233,11 @@ There are people recommand write const volatile infront of auto to avoid auto ty
 ```C++
 const volatile auto coeffarr={3.6666667, 2.65, 1.3333}; //const volatile double[]
 ```
+- [auto or auto&](https://stackoverflow.com/questions/29859796/c-auto-vs-auto/29859998)  
+Choose auto x when you want to work with copies.  
+Choose auto &x when you want to work with original items and may modify them.  
+Choose auto const &x when you want to work with original items and will not modify them.  
+
 - Decltype deduces the type of an expression
 ```C++
 template <class T>
@@ -277,8 +283,8 @@ std::result_of is an older version before decltype.  std::result_of could be imp
 ## Sharedptr
 | Keyword                       | Notes                          | Reference |
 |-------------------------------|:------------------------------|:------------------------------|
-|shared_ptr|||
-|unique_ptr|guarantee deallocation||
+|shared_ptr||[code snippet](http://cpp.sh/3p5m4j) Tests shared_ptr|
+|unique_ptr|guarantee deallocation <br/> only move, no assignment|[code snippet](http://cpp.sh/8zpr6) Implements make_unique|
 |weak_ptr|||
 <br/>
 
@@ -308,7 +314,7 @@ std::unique_ptr<int,void(*)(int*)> ptr(new int(1),[&](int* p){delete p;}); //inc
 std::unique_ptr<int,std::function<void(int*)>> ptr(new int(1),[&](int* p){delete p;});
 ```
 
-- **Never dereferernce shared_ptr and then call obejct's interface**
+- <span style="color:red">**Never dereferernce shared_ptr and then call obejct's interface**</span>
 ```C++
 auto& p = *returns_a_shard_ptr();
 // If you dereference shared_ptr to normal pointers, that means you given up protection from shared_ptr
@@ -317,8 +323,19 @@ auto& p = *returns_a_shard_ptr();
 p.func();  
 ```
 
-- **Is shared_ptr thread safe?**  
+- <span style="color:red">**Is shared_ptr thread safe?**</span>  
 Don't get your hopes up.  There are two parts in shared_ptr, one is ref-count and another is the pointer it points to.  If there is no protection who could gurantee the safeness of the pointer?
+
+
+- Manage 3rd party resource
+```C++
+#define GUARD(P) std::shared_ptr<void> p##p(p, [](void*p){ GetHandle()->Release(p);});
+// or #define GUARD(P) std::unique_ptr<void, void(*)(int*)> p##p(p, [](void*p){ GetHandle()->Release(p);});
+
+void* p = GetHandle()->Create();
+GUARD(p);
+
+```
 
 ## Concurrency
 
