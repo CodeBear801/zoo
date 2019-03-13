@@ -283,9 +283,9 @@ std::result_of is an older version before decltype.  std::result_of could be imp
 ## Sharedptr
 | Keyword                       | Notes                          | Reference |
 |-------------------------------|:------------------------------|:------------------------------|
-|shared_ptr||[code snippet](http://cpp.sh/3p5m4j) Tests shared_ptr|
+|shared_ptr||[code snippet](http://cpp.sh/9bn4f) Tests shared_ptr|
 |unique_ptr|guarantee deallocation <br/> only move, no assignment|[code snippet](http://cpp.sh/8zpr6) Implements make_unique|
-|weak_ptr|||
+|weak_ptr|Won't increase shared_ptr's reference count, could be used for break recursive referernce <br/>||
 <br/>
 
 - Example of unique_ptr [from aws-sdk](https://github.com/aws/aws-iot-device-sdk-cpp/blob/dab39e33abad342e51476cde85d35613159203c5/src/util/JsonParser.cpp#L40)
