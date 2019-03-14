@@ -10,6 +10,7 @@ Wednesday, March 12, 2019<br/>
 - Candidate should know every decision of consequence is made by group, he/she suppose to have collaboration skill and communication skill.
 - Implement std::string or tuple::get()
 - Buffered file reader implementation
+- Why use C++?
 
 ## Useful links
 - cppnow.org
@@ -18,9 +19,9 @@ Wednesday, March 12, 2019<br/>
 
 ## Slides
 
-<img src="resources/imgs/interview_c++_page1.png" alt="interview_c++_page1" width="400"/>
+<img src="resources/imgs/interview_c++_page1.png" alt="interview_c++_page1" width="600"/>
 <br/>
-<img src="resources/imgs/interview_c++_page2.png" alt="interview_c++_page2" width="400"/>
+<img src="resources/imgs/interview_c++_page2.png" alt="interview_c++_page2" width="600"/>
 <br/>
 <span style="color:grey">Don't try those questions, too detail</span> <br/>
 <img src="resources/imgs/interview_c++_page3.png" alt="interview_c++_page3" width="400"/>
@@ -29,8 +30,8 @@ Wednesday, March 12, 2019<br/>
 <img src="resources/imgs/interview_c++_page4.png" alt="interview_c++_page4" width="400"/>
 <br/>
 <span style="color:grey">How to make your evaluation system consistent, same candidate might get opposite result if you don't prepare carely enough</span><br/>
-<img src="resources/imgs/interview_c++_page5.png" alt="interview_c++_page5" width="400"/>
+<img src="resources/imgs/interview_c++_page5.png" alt="interview_c++_page5" width="600"/>
 <br/>
 <span style="color:grey">Interview is a bidirection process</span><br/>
-<img src="resources/imgs/interview_c++_page6.png" alt="interview_c++_page6" width="400"/>
+<img src="resources/imgs/interview_c++_page6.png" alt="interview_c++_page6" width="600"/>
 <br/>
