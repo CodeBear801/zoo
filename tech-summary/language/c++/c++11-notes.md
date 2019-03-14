@@ -21,7 +21,9 @@
 
 ## General
 [The biggest changes in C++11](https://smartbear.com/blog/develop/the-biggest-changes-in-c11-and-why-you-should-care/)  
-[A glimpse into C++14]( https://blog.smartbear.com/development/a-glimpse-into-c14/)  
+[A glimpse into C++14](https://blog.smartbear.com/development/a-glimpse-into-c14/)
+[C++17 language features](https://stackoverflow.com/questions/38060436/what-are-the-new-features-in-c17)
+[2019-02 Kona report about C++ 20](https://www.reddit.com/r/cpp/comments/au0c4x/201902_kona_iso_c_committee_trip_report_c20/)
 
 ## Rules
 1. Try to avoid FOR loops, see whether there is internal functions supported.  
@@ -329,8 +331,8 @@ Don't get your hopes up.  There are two parts in shared_ptr, one is ref-count an
 
 - Manage 3rd party resource
 ```C++
-#define GUARD(P) std::shared_ptr<void> p##p(p, [](void*p){ GetHandle()->Release(p);});
-// or #define GUARD(P) std::unique_ptr<void, void(*)(int*)> p##p(p, [](void*p){ GetHandle()->Release(p);});
+#define GUARD(p) std::shared_ptr<void> p##p(p, [](void*p){ GetHandle()->Release(p);});
+// or #define GUARD(p) std::unique_ptr<void, void(*)(void*)> p##p(p, [](void*p){ GetHandle()->Release(p);});
 
 void* p = GetHandle()->Create();
 GUARD(p);
