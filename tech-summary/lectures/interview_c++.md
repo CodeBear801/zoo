@@ -1,5 +1,3 @@
-# Human + Machine Learning
-
 # Interview C++
 Wednesday, March 12, 2019<br/>
 7:00--8:15 Rchard Powell<rmpowell77@me.com> <br/>
@@ -18,7 +16,7 @@ Wednesday, March 12, 2019<br/>
 - Cppcon.org
 - [Deep understanding of language](https://www.slideshare.net/olvemaudal/deep-c/) 
 
-## slides
+## Slides
 
 <img src="resources/imgs/interview_c++_page1.png" alt="interview_c++_page1" width="400"/>
 <br/>
