@@ -1,16 +1,16 @@
 # Interview C++
 Wednesday, March 12, 2019<br/>
-7:00--8:15 Rchard Powell<rmpowell77@me.com> <br/>
+7:00--8:15 [Rchard Powell](rmpowell77@me.com) <br/>
 @Synopsys
 
 ## Take away
-- Take a reference of vector with integers, remove value which is power of 2 from it
+- Take a reference of vector with integers, remove value which is power of 2 from it  
   You could use Lambda, 2 for loop, or more elegant solution, sort?
 - Ask candidate what's your favorite projects/code, let them describe, and then try to **add new features** in the code base
 - Candidate should know every decision of consequence is made by group, he/she suppose to have collaboration skill and communication skill.
 - Implement std::string or tuple::get()
 - Buffered file reader implementation
-- Why use C++?
+- Why use C++ for your project?
 
 ## Useful links
 - cppnow.org

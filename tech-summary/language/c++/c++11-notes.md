@@ -285,8 +285,8 @@ std::result_of is an older version before decltype.  std::result_of could be imp
 ## Sharedptr
 | Keyword                       | Notes                          | Reference |
 |-------------------------------|:------------------------------|:------------------------------|
-|shared_ptr||[code snippet](http://cpp.sh/9bn4f) Tests shared_ptr|
-|unique_ptr|guarantee deallocation <br/> only move, no assignment|[code snippet](http://cpp.sh/8zpr6) Implements make_unique|
+|shared_ptr|| *[code snippet](http://cpp.sh/9bn4f) Tests shared_ptr|
+|unique_ptr|guarantee deallocation <br/> only move, no assignment| * [code snippet](http://cpp.sh/8zpr6) Implements make_unique <br/> * [code snippet](http://cpp.sh/2kkip) deleter type for shared_ptr and unique_ptr |
 |weak_ptr|Won't increase shared_ptr's reference count, could be used for break recursive referernce <br/>||
 <br/>
 
