@@ -21,9 +21,10 @@
 
 ## General
 [The biggest changes in C++11](https://smartbear.com/blog/develop/the-biggest-changes-in-c11-and-why-you-should-care/)  
-[A glimpse into C++14](https://blog.smartbear.com/development/a-glimpse-into-c14/)
-[C++17 language features](https://stackoverflow.com/questions/38060436/what-are-the-new-features-in-c17)
-[2019-02 Kona report about C++ 20](https://www.reddit.com/r/cpp/comments/au0c4x/201902_kona_iso_c_committee_trip_report_c20/)
+[A glimpse into C++14](https://blog.smartbear.com/development/a-glimpse-into-c14/)  
+[C++17 language features](https://stackoverflow.com/questions/38060436/what-are-the-new-features-in-c17)  
+[2019-02 Kona report about C++ 20](https://www.reddit.com/r/cpp/comments/au0c4x/201902_kona_iso_c_committee_trip_report_c20/)  
+[CPP Core Guidelines](https://github.com/isocpp/CppCoreGuidelines)  
 
 ## Rules
 1. Try to avoid FOR loops, see whether there is internal functions supported.  
