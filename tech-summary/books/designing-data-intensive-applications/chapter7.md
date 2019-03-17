@@ -11,14 +11,9 @@
 - Transactions were the initial casualty of the NoSQL movement, though they are starting to make a bit of a comeback.
 - **Not all applications need transactions. Not all applications want transactions. And not all transactions are the same.**
 
-### ACID
-- ACID, short for atomic-consistent-isolated-durable, is the oft-cited headliner property of a SQL data store.
-- Operations are atomic if they either succeed completely or fail completely.
-- Consistency is meaningless, and was added to pad out the term and make the acronym work.
-- Operations are isolated if they cannot see the results of partially applied work by other operations. In other words, if two operations happen concurrently, any one will see the state either before or after the changes precipitated by its peer, but never in the middle.
-- A database is durable if it doesn't lose data. In practice nothing is really durable, but there are different levels of guarantees.
 
-### Single versus multi object operations
+### Single-Object and Multi-Object Operations
+
 - An operation is single-object if it only touches one record in the database (one row, one document, one value; whatever the smallest unit of thing is). It is multi-object if it touches multiple records.
 - Basically all stores implement single-object operation isolation and atomicity. Not doing so would allow for partial updates to records in cases of failures (e.g. half-inserting an updated JSON blob right before a crash), which is Very Bad.
 - Isolated and atomic multi-object operations ("strong transactions") are more difficult to implement because they require maintaining groups of operations, they get in the way of high availability, and they are hard to make work across partitions.
@@ -55,8 +50,20 @@ Snapshot isolation could address issue of read committed.  Reads that occur in t
 
 
 - Implemetation   
-  Using write locks and extended read value-holding (sometimes called "multiversion").  
-  Note: repeatable read is used in the SQL standard, but is vague. Implementations like to have a repeatable read level, but it's meaningless and implementation-specific.
+  Using write locks and extended read value-holding (sometimes called "multiversion").  A key principle of snapshot isolation is **readers never block writers, and writers never block readers.**  
+  <br/>
+  MVCC  
+  [How MVCC work in postgresql](https://vladmihalcea.com/how-does-mvcc-multi-version-concurrency-control-work/)  
+  [MVCC in Transactional Systems](https://0x0fff.com/mvcc-in-transactional-systems/)
+  xmin - which defines the transaction id that inserted the record
+  xmax - which defines the transaction id that deleted the row
+  
+<img src="resources/pictures/ddia_c7_postgres_mvcc.png" alt="ddia_c7_postgres_mvcc" width="400"/>   <br/>
+        - When you insert data, you insert the row with xmin equal to current transaction id and xmax set to null;  
+        - When you delete the data, you find visible row that should be deleted, and set its xmax to the current transaction id;  
+        - When you update the data, for each updated row you first perform “delete” and then “insert”.  
+
+
 - Possible issue: lost updates. Concurrent transactions that encapsulate read-modify-write operations will behave poorly on collision. A simple example is a counter that gets updated twice, but only goes up by one. The earlier write operation is said to be lost.  
   Ways to address this problem that live in the wild:
   - Atomic update operation (e.g. UPDATE keyword).
@@ -65,15 +72,19 @@ Snapshot isolation could address issue of read committed.  Reads that occur in t
   - Atomic compare-and-set (e.g. UPDATE ... SET ... WHERE foo = 'expected_old_value').
   - Delayed application-based conflict resolution. Last resort, and only truly necessary for multi-master architectures.
 - Possible issue: write skew  
+  
+  <img src="resources/pictures/ddia_c7_writeskew_example.png" alt="ddia_c7_writeskew_example" width="600"/>  
+<br/>
   As with lost updates, two transactions perform a read-modify-write, but now they modify two different objects based on the value they read.
   Example in the book: two doctors concurrently withdraw from being on-call, when business logic dictates that at least one must always be on call.  This occurs across multiple objects, so atomic operations do not help.
   - Automatic detection at the snapshot isolation level and without serializability would require making 
  consistency checks on every write, where is the number of concurrent write-carrying transactions in flight. This is way too high a performance penalty.
   - Only transaction-wide record locking works. So you have to make this transaction explicitly serialized, using e.g. a FOR UPDATE keyword.
 - Next possible grade of issue: phantom write skew.
-  - You can theoretically insert a lock on a phantom record, and then stop the second transaction by noting the presence of the lock. This is known as materializing conflicts.
-  - This is ugly because it messes with the application data model, however. Has limited support.
-  - If this issue cannot be mitigated some other way, just give up and go serialized.
+  - Materializing conflicts
+  - You can theoretically insert a lock on a phantom record, and then stop the second transaction by noting the presence of the lock. This is known as materializing conflicts.  This is ugly because it messes with the application data model, however. Has limited support.  If this issue cannot be mitigated some other way, just give up and go serialized.
+
+
 
 
 ### Serialization
