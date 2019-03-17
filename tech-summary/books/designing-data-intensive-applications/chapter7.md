@@ -14,6 +14,7 @@
 		- [Serialization](#serialization)
 			- [Actual Serial Execution](#actual-serial-execution)
 			- [Pessimistic Lock/Optimistic Lock](#pessimistic-lockoptimistic-lock)
+	- [Reference](#reference)
 
 
 
@@ -58,7 +59,7 @@ The strongest possible isolation guarantee is serializable isolation: transacti
 
 <img src="resources/pictures/ddia_c7_read_commited_example.png" alt="ddia_c7_read_commited_example" width="600"/>  
 <br/>
-- Implemetation  
+- Implemetation<br/>
   **Hold a row-level lock** on the record you are writing to.  You could do the same with a read lock. However, there is a lower-impact way. Hold the old value in memory, and issue that value in response to reads, until the transaction is finalized.  If a user performs a multi-object write transaction that they believe to be atomic (say, transferring money between two accounts), then performs a read in between the transaction, what they see may seem anomalous (say, one account was deducted but the other wasn't credited).
 
 
@@ -72,16 +73,16 @@ Snapshot isolation could address issue of read committed.  Reads that occur in t
 - Implemetation   
   Using write locks and extended read value-holding (sometimes called "multiversion").  A key principle of snapshot isolation is **readers never block writers, and writers never block readers.**  
   <br/>
-  MVCC  
-  [How MVCC work in postgresql](https://vladmihalcea.com/how-does-mvcc-multi-version-concurrency-control-work/)  
-  [MVCC in Transactional Systems](https://0x0fff.com/mvcc-in-transactional-systems/)
-  xmin - which defines the transaction id that inserted the record
-  xmax - which defines the transaction id that deleted the row
+  * MVCC  
+  	* [How MVCC work in postgresql](https://vladmihalcea.com/how-does-mvcc-multi-version-concurrency-control-work/)  
+  	* [MVCC in Transactional Systems](https://0x0fff.com/mvcc-in-transactional-systems/)
+  		* xmin - which defines the transaction id that inserted the record
+  		* xmax - which defines the transaction id that deleted the row
   
-<img src="resources/pictures/ddia_c7_postgres_mvcc.png" alt="ddia_c7_postgres_mvcc" width="400"/>   <br/>
-        - When you insert data, you insert the row with xmin equal to current transaction id and xmax set to null;  
-        - When you delete the data, you find visible row that should be deleted, and set its xmax to the current transaction id;  
-        - When you update the data, for each updated row you first perform “delete” and then “insert”.  
+		 <img src="resources/pictures/ddia_c7_postgres_mvcc.png" alt="ddia_c7_postgres_mvcc" width="400"/>   <br/>
+			* When you insert data, you insert the row with xmin equal to current transaction id and xmax set to null;  
+			* When you delete the data, you find visible row that should be deleted, and set its xmax to the current transaction id  
+			* When you update the data, for each updated row you first perform “delete” and then “insert”.  
 
 
 - Possible issue: lost updates. Concurrent transactions that encapsulate read-modify-write operations will behave poorly on collision. A simple example is a counter that gets updated twice, but only goes up by one. The earlier write operation is said to be lost.  
@@ -91,15 +92,14 @@ Snapshot isolation could address issue of read committed.  Reads that occur in t
   - Automatically detecting lost updates at the database level, and bubbling this back up to the application.
   - Atomic compare-and-set (e.g. UPDATE ... SET ... WHERE foo = 'expected_old_value').
   - Delayed application-based conflict resolution. Last resort, and only truly necessary for multi-master architectures.
-- Possible issue: write skew  
-  
-  <img src="resources/pictures/ddia_c7_writeskew_example.png" alt="ddia_c7_writeskew_example" width="600"/>  
-<br/>
-  As with lost updates, two transactions perform a read-modify-write, but now they modify two different objects based on the value they read.
-  Example in the book: two doctors concurrently withdraw from being on-call, when business logic dictates that at least one must always be on call.  This occurs across multiple objects, so atomic operations do not help.
-  - Automatic detection at the snapshot isolation level and without serializability would require making 
- consistency checks on every write, where is the number of concurrent write-carrying transactions in flight. This is way too high a performance penalty.
-  - Only transaction-wide record locking works. So you have to make this transaction explicitly serialized, using e.g. a FOR UPDATE keyword.
+- Possible issue: write skew    
+  <img src="resources/pictures/ddia_c7_writeskew_example.png" alt="ddia_c7_writeskew_example" width="600"/>   
+  - As with lost updates, two transactions perform a read-modify-write, but now they modify two different objects based on the value they read.  
+  - Example in the book: two doctors concurrently withdraw from being on-call, when business logic dictates that at least one must always be on call.  This occurs across multiple objects, so atomic operations do not help.  <br/>
+  - Automatic detection at the snapshot isolation level and without serializability would require making consistency checks on every write, where is the number of concurrent write-carrying transactions in flight. This is way too high a performance penalty.<br/>
+  - Only transaction-wide record locking works. So you have to make this transaction explicitly serialized, using e.g. a FOR UPDATE keyword.<br/>
+
+
 - Next possible grade of issue: phantom write skew.
   - Materializing conflicts
   - You can theoretically insert a lock on a phantom record, and then stop the second transaction by noting the presence of the lock. This is known as materializing conflicts.  This is ugly because it messes with the application data model, however. Has limited support.  If this issue cannot be mitigated some other way, just give up and go serialized.
@@ -144,6 +144,6 @@ You can evade phantom skew by using predicate locks. These lock on all data in 
 - SSI detects, at commit time (e.g. at the end of the transaction), whether or not any of the operations (reads or writes) that the transaction is performing are based on outdated premises (values that have changed since the beginning of the transaction). If not, the transaction goes through. If yes, then the transaction fails and a retry is prompted.
 
 
-[Reference]
+## Reference
 - [postgresql transaction iso](https://www.postgresql.org/docs/9.5/transaction-iso.html)
 - [postgresql high performance tips](https://vladmihalcea.com/9-postgresql-high-performance-performance-tips/)
