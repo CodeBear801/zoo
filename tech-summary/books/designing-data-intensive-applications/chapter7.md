@@ -11,16 +11,17 @@
 - Transactions were the initial casualty of the NoSQL movement, though they are starting to make a bit of a comeback.
 - **Not all applications need transactions. Not all applications want transactions. And not all transactions are the same.**
 
+<img src="resources/pictures/ddia_c7_acid.png" alt="ddia_c7_acid" width="600"/>  
+<br/>
 
 ### Single-Object and Multi-Object Operations
 
-- An operation is single-object if it only touches one record in the database (one row, one document, one value; whatever the smallest unit of thing is). It is multi-object if it touches multiple records.
-- Basically all stores implement single-object operation isolation and atomicity. Not doing so would allow for partial updates to records in cases of failures (e.g. half-inserting an updated JSON blob right before a crash), which is Very Bad.
-- Isolated and atomic multi-object operations ("strong transactions") are more difficult to implement because they require maintaining groups of operations, they get in the way of high availability, and they are hard to make work across partitions.
-- So even though distributed data stores that abandon transactions may offer operations like e.g. multi-put, they allow these operations to result in partial application in the face of failures.
-- These services work on a "best effort" basis. If an error occurs it is bubbled up to the application, and the application layer must decide how to proceed.
-- Can you get away without multi-object operations? Maybe, but only if your service is a very simple one.
-- All of the things that follow are race conditions.
+#### Single-object writes
+Atomicity can be implemented using a log for crash recovery and isolation can be implemented using a lock on each object (allowing only one thread to access an object at any one time).  
+
+#### Multi-Object Operations
+Foreign key referernce update/Second level index  
+Nosql update several document togehter  
 
 
 ### Weak isolation levels
