@@ -2,4 +2,5 @@
 
 
 - [Chapter 6: Partitioning](./chapter6.md)
+- [Chatper 7: Transections](./chapter7.md)
 - [Chapter 8: The Trouble with Distributed Systems](./chapter8.md)
