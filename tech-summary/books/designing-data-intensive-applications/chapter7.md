@@ -29,42 +29,51 @@
 
 
 ### Weak isolation levels
-- The strongest possible isolation guarantee is serializable isolation: transactions that run concurrently on the same data are guaranteed to perform the same as they would were they to run serially.
-- However serializable isolation is costly. Systems skimp on it by offering weaker forms of isolation.
-- As a result, race conditions and failure modes abound. Concurrent failures are really, really hard to debug, because they require lucky timings in your system to occur.
-- Let's treat some isolation levels and some concurrency bugs and see what we get.
 
-- The weakest isolation guarantee is read committed. This isolation level prevents dirty reads (reads of data that is in-flight) and dirty writes (writes over data that is in-flight).
-- Lack of dirty read safety would allow you to read values that then get rolled back. Lack of dirty write safety would allow you to write values that read to something else in-flight (so e.g. the wrong person could get an invoice for a product that they didn't actually get to buy).
-- How to implement read committed?
-- Hold a row-level lock on the record you are writing to.
-- You could do the same with a read lock. However, there is a lower-impact way. Hold the old value in memory, and issue that value in response to reads, until the transaction is finalized.
-- If a user performs a multi-object write transaction that they believe to be atomic (say, transferring money between two accounts), then performs a read in between the transaction, what they see may seem anomalous (say, one account was deducted but the other wasn't credited).
-- Snapshot isolation addresses this. In this scheme, reads that occur in the middle of a transaction read their data from the version of the data (the snapshot) that preceded the start of the transaction.
-- This makes it so that multi-object operations look atomic to the end user (assuming they succeed).
-- Snapshot isolation is implemented using write locks and extended read value-holding (sometimes called "multiversion").
-- Note: repeatable read is used in the SQL standard, but is vague. Implementations like to have a repeatable read level, but it's meaningless and implementation-specific.
-- Next possible issue: lost updates. Concurrent transactions that encapsulate read-modify-write operations will behave poorly on collision. A simple example is a counter that gets updated twice, but only goes up by one. The earlier write operation is said to be lost.
-- There are a wealth of ways to address this problem that live in the wild:
-- Atomic update operation (e.g. UPDATE keyword).
-- Transaction-wide write locking. Expensive!
-- Automatically detecting lost updates at the database level, and bubbling this back up to the application.
-- Atomic compare-and-set (e.g. UPDATE ... SET ... WHERE foo = 'expected_old_value').
-- Delayed application-based conflict resolution. Last resort, and only truly necessary for multi-master architectures.
-- Next possible issue: write skew.
-- As with lost updates, two transactions perform a read-modify-write, but now they modify two different objects based on the value they read.
-- Example in the book: two doctors concurrently withdraw from being on-call, when business logic dictates that at least one must always be on call.
-- How do you mitigate?
-- This occurs across multiple objects, so atomic operations do not help.
-- Automatic detection at the snapshot isolation level and without serializability would require making 
- consistency checks on every write, where 
- is the number of concurrent write-carrying transactions in flight. This is way too high a performance penalty.
-- Only transaction-wide record locking works. So you have to make this transaction explicitly serialized, using e.g. a FOR UPDATE keyword.
+The strongest possible isolation guarantee is serializable isolation: transactions that run concurrently on the same data are guaranteed to perform the same as they would were they to run serially.  However serializable isolation is costly. Systems skimp on it by offering weaker forms of isolation.  As a result, race conditions and failure modes abound. Concurrent failures are really, really hard to debug, because they require lucky timings in your system to occur.
+
+#### Read committed
+- The weakest isolation guarantee is read committed.   
+  When reading from the database, you will only see data that has been committed (no dirty reads).  
+  When writing to the database, you will only overwrite data that has been committed (no dirty writes).  
+- This isolation level prevents dirty reads (reads of data that is in-flight) and dirty writes (writes over data that is in-flight).
+- Lack of dirty read safety would allow you to read values that then get rolled back. Lack of dirty write safety would allow you to write values that read to something else in-flight (so e.g. the wrong person could get an invoice for a product that they didn't actually get to buy).  
+
+- Read committed does not prevent **the race condition between two counter increments**.
+
+<img src="resources/pictures/ddia_c7_read_commited_example.png" alt="ddia_c7_read_commited_example" width="600"/>  
+<br/>
+- Implemetation  
+  **Hold a row-level lock** on the record you are writing to.  You could do the same with a read lock. However, there is a lower-impact way. Hold the old value in memory, and issue that value in response to reads, until the transaction is finalized.  If a user performs a multi-object write transaction that they believe to be atomic (say, transferring money between two accounts), then performs a read in between the transaction, what they see may seem anomalous (say, one account was deducted but the other wasn't credited).
+
+
+#### Snapshot isolation
+
+<img src="resources/pictures/ddia_c7_snapshot_example.png" alt="ddia_c7_snapshot_example" width="600"/>  
+<br/>
+Snapshot isolation could address issue of read committed.  Reads that occur in the middle of a transaction read their data from the version of the data (the snapshot) that preceded the start of the transaction.  This makes it so that multi-object operations look atomic to the end user (assuming they succeed).
+
+
+- Implemetation   
+  Using write locks and extended read value-holding (sometimes called "multiversion").  
+  Note: repeatable read is used in the SQL standard, but is vague. Implementations like to have a repeatable read level, but it's meaningless and implementation-specific.
+- Possible issue: lost updates. Concurrent transactions that encapsulate read-modify-write operations will behave poorly on collision. A simple example is a counter that gets updated twice, but only goes up by one. The earlier write operation is said to be lost.  
+  Ways to address this problem that live in the wild:
+  - Atomic update operation (e.g. UPDATE keyword).
+  - Transaction-wide write locking. Expensive!
+  - Automatically detecting lost updates at the database level, and bubbling this back up to the application.
+  - Atomic compare-and-set (e.g. UPDATE ... SET ... WHERE foo = 'expected_old_value').
+  - Delayed application-based conflict resolution. Last resort, and only truly necessary for multi-master architectures.
+- Possible issue: write skew  
+  As with lost updates, two transactions perform a read-modify-write, but now they modify two different objects based on the value they read.
+  Example in the book: two doctors concurrently withdraw from being on-call, when business logic dictates that at least one must always be on call.  This occurs across multiple objects, so atomic operations do not help.
+  - Automatic detection at the snapshot isolation level and without serializability would require making 
+ consistency checks on every write, where is the number of concurrent write-carrying transactions in flight. This is way too high a performance penalty.
+  - Only transaction-wide record locking works. So you have to make this transaction explicitly serialized, using e.g. a FOR UPDATE keyword.
 - Next possible grade of issue: phantom write skew.
-- A FOR UPDATE will only stop a write skew if the constraint exists in the database. If the constraint is the lack of something in the database, we are stuck, because there is nothing to lock. Example of where this might come up: two users registering the same username.
-- You can theoretically insert a lock on a phantom record, and then stop the second transaction by noting the presence of the lock. This is known as materializing conflicts.
-- This is ugly because it messes with the application data model, however. Has limited support.
-- If this issue cannot be mitigated some other way, just give up and go serialized.
+  - You can theoretically insert a lock on a phantom record, and then stop the second transaction by noting the presence of the lock. This is known as materializing conflicts.
+  - This is ugly because it messes with the application data model, however. Has limited support.
+  - If this issue cannot be mitigated some other way, just give up and go serialized.
 
 
 ### Serialization
@@ -77,25 +86,33 @@
 <br/>
 
 #### Pessimistic Lock/Optimistic Lock
-- Two-phase locking is the oldest technique, and for a long time the only one.
-- Two-phase locks are very strong locks, strong enough to provide true serialization. A basic two phase lock performs as follows:
-	- Transactions that read acquire shared-mode locks on touched records.
-	- Transactions that write acquire, and transactions that want to write after reading update to, exclusive locks on touched records.
-	- Transactions hold the highest grade locks they have for as long as the transaction is in play.
-- In snapshot isolation, reads do not block reads or writes and writes do not block reads. In two-phase locking, reads do not block reads or writes, but writes block everything.
-- Because so many locks occur, it's much easier than in snapshot isolation to arrive at a deadlock. Deadlocks occur when a transaction holds a lock on a record that another transaction needs, and that record holds a lock that the other transaction needs. The database has to automatically fail one of the transactions, roll it back, and prompt the application for a retry.
-- Why is 2PL bad? Because it has very bad performance implications. Long-blocking writes are a problem. Deadlocks are a disaster. Generally 2PL architectures have very bad performance at high percentiles; this is a main reason why "want-to-be sleek" systems like Amazon have moved away from them.
-- There's one more implementation detail to consider: how 2PL addresses phantom skew.
-- You can evade phantom skew by using predicate locks. These lock on all data in the database that matches a certain condition, even data that doesn't exist yet.
-- Predicate locks are expensive because they involve a lot of compare operations, one for each concurrent write. In practice most databases use index-range locks instead, which simplify the predicate to an index of values of some kind instead of a complex condition.
-- This lock covers a strict superset of the records covered by the predicate lock, so it causes more queries to have to wait for lock releases. But, it spares CPU cycles, which is currently worth it.
+
+Name | Details | Pros | Cons | Comments
+---|:---|:---|:---|:---
+Two-phase locking | * Transactions that read acquire shared-mode locks on touched records. <br/> * Transactions that write acquire, and transactions that want to write after reading update to, exclusive locks on touched records.<br/> * Transactions hold the highest grade locks they have for as long as the transaction is in play. | * Reads do not block reads or writes, but writes block everything.(Compre snapshot isolation, reads do not block reads or writes and writes do not block reads) | * Because so many locks occur, it's much easier than in snapshot isolation to arrive at a deadlock. Deadlocks occur when a transaction holds a lock on a record that another transaction needs, and that record holds a lock that the other transaction needs. The database has to automatically fail one of the transactions, roll it back, and prompt the application for a retry. <br/> * It has very bad performance implications. Long-blocking writes are a problem. Deadlocks are a disaster. Generally 2PL architectures have very bad performance at high percentiles; this is a main reason why "want-to-be sleek" systems like Amazon have moved away from them. | 
+Serializable snapshot isolation | * based on snapshot isolation, but adds an additional algorithmic layer that makes it serialized and isolated. | * Beats 2PL for certain workloads especially read-heavy workloads <br/> * better performance when there is low record competition and when overall load is low| Poorer performance when lock competition is high and overall load is high. |
 
 
-- The third technique is the newest. It is serializable snapshot isolation.
-- True to its name it is based on snapshot isolation, but adds an additional algorithmic layer that makes it serialized and isolated.
+
+- 2 Phase Lock  
+<img src="resources/pictures/ddia_c7_2pl_example.png" alt="ddia_c7_2pl_example" width="300"/>  
+<br/>
+
+- SSI ([Postgis Serializable](https://wiki.postgresql.org/wiki/Serializable))  
+
+<img src="resources/pictures/postgresql-Serialization-Anomalies-in-Snapshot-Isolation.png" alt="postgresql-Serialization-Anomalies-in-Snapshot-Isolation" width="600"/>  
+<br/>
+- How to avoid dead lock in 2PL(a separate thread checking)  
+
+[CMU Concurrancy control](https://15721.courses.cs.cmu.edu/spring2017/slides/03-cc.pdf)  
+
+- How 2PL addresses phantom skew(implementation detail)  
+You can evade phantom skew by using predicate locks. These lock on all data in the database that matches a certain condition, even data that doesn't exist yet.  Predicate locks are expensive because they involve a lot of compare operations, one for each concurrent write. In practice most databases use index-range locks instead, which simplify the predicate to an index of values of some kind instead of a complex condition.  This lock covers a strict superset of the records covered by the predicate lock, so it causes more queries to have to wait for lock releases. But, it spares CPU cycles, which is currently worth it.  
+
 - **SSI is an optimistic concurrency control technique. Two-phase locking is a pessimistic concurrency control technique.**  SSI works by allowing potentially conflicting operations to go through, then making sure that nothing bad happens; 2PL works by preventing potentially conflicting operations from occurring at all.
-- An optimistic algorithm has better performance when there is low record competition and when overall load is low. It has poorer performance when lock competition is high and overall load is high.
-- It beats 2PL for certain workloads!
 - SSI detects, at commit time (e.g. at the end of the transaction), whether or not any of the operations (reads or writes) that the transaction is performing are based on outdated premises (values that have changed since the beginning of the transaction). If not, the transaction goes through. If yes, then the transaction fails and a retry is prompted.
-- For read-heavy workloads, SSI is a real winner!
 
+
+[Reference]
+- [postgresql transaction iso](https://www.postgresql.org/docs/9.5/transaction-iso.html)
+- [postgresql high performance tips](https://vladmihalcea.com/9-postgresql-high-performance-performance-tips/)
