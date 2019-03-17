@@ -1,3 +1,22 @@
+
+<!-- TOC -->
+- [Transections](#transections)
+	- [Keywords](#keywords)
+	- [Questions](#questions)
+	- [Notes](#notes)
+		- [Transactions](#transactions)
+		- [Single-Object and Multi-Object Operations](#single-object-and-multi-object-operations)
+			- [Single-object writes](#single-object-writes)
+			- [Multi-Object Operations](#multi-object-operations)
+		- [Weak isolation levels](#weak-isolation-levels)
+			- [Read committed](#read-committed)
+			- [Snapshot isolation](#snapshot-isolation)
+		- [Serialization](#serialization)
+			- [Actual Serial Execution](#actual-serial-execution)
+			- [Pessimistic Lock/Optimistic Lock](#pessimistic-lockoptimistic-lock)
+
+
+
 # Transections
 
 ## Keywords
