@@ -81,6 +81,8 @@ My notes for [2pc and 3pc](../../papers/2pc_3pc.md)
 - Two-phase commit is a simple idea, but it turns out to make for a crappy consensus algorithm, due to this exact problem.
 
 #### Consensus algorithms
+My notes for [raft](../../papers/raft.md)  
+My implementation for [raft](https://github.com/CodeBear801/mit6.824/tree/master/6.824-golabs-2018/src)
 - Good consensus algorithms avoid this problem. The field includes Paxos (the oldest), Zab, Raft, and VSR.
 - The consensus algorithms are all designed around epochs and strict quorums.
 	- Each time a leader loss occurs, a quorum of nodes is gathered to vote on a new leader. The new leader increments the epoch number.

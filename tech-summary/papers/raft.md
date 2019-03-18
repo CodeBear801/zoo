@@ -91,4 +91,4 @@ Case 2: follower didn't match with server's term, server knows dismatch then he 
 
 How to guarantee leader holds all entries  
 When candidate ask for a vote, it send out its last latest entry.  
-Based on term and index decide for completeness  
+**Based on term and index decide for completeness**  
