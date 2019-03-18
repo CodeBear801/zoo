@@ -69,10 +69,9 @@ Linearizability
 - While these two properties are different, having one allows you to have the other, if you desire.
 
 ### Consensus
-- Consensus algorithms are a class of algorithms for addressing the node consensus problem.
-- No matter how you design a distributed system, there will always be situations where all nodes must agree on state. For example, transactions across data partitions on different nodes, or leader elections.
-- Total order broadcast is an identity transform of a consensus algorithm.
-- The classic algorithm for this is the two-phase commit.
+Consensus algorithms are a class of algorithms for addressing the node consensus problem.  No matter how you design a distributed system, there will always be situations where all nodes must agree on state. For example, transactions across data partitions on different nodes, or leader elections.  
+Total order broadcast is an identity transform of a consensus algorithm.
+
 #### Two phase commit
 - Two-phase commit relies on a coordinator, usually a separate process, which performs a pre-flight check on all of the nodes involving, asking if they can perform the op. The nodes check and reply yes or no. If any nodes say no, the state change is aborted. If all nodes say yes, the coordinator sends a green light.
 - This algorithm obviously relies on atomic broadcast to work.
@@ -90,8 +89,9 @@ Linearizability
 - Therefore it is very slow, particularly if the network is bad.
 - Additionally, certain network partitions can lead to very bad worst-case behavior, such as continuous elections.
 - Designing consensus algorithms that are more robust to network failures is an ongoing area of research.
-- The chapter ends with a discussion of the sorts of things ZooKeeper is used for.
+
 
 
 ### Reference
 - [浅析分布式系统中的 Linearizability](https://yq.aliyun.com/articles/98608)
+- [吴镝 - Vector Clock/Version Clock](http://www.cnblogs.com/foxmailed/p/4985848.html)
