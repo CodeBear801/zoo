@@ -4,6 +4,7 @@
 	- [Notes](#notes)
 		- [Consistency and consensus](#consistency-and-consensus)
 		- [Ordering](#ordering)
+			- [Sequence](#sequence)
 		- [Consensus](#consensus)
 			- [Two phase commit](#two-phase-commit)
 			- [Consensus algorithms](#consensus-algorithms)
@@ -40,34 +41,34 @@ Linearizability
 
 ### Ordering
 My notes for [vector clock](../../papers/lamport_logic_clock.md)  
-- Linearizability implies causal consistency 
-- That is because linearizability affords a total ordering.
-- However, you can have causal consistency without linearizability (a partial ordering).
-- A causally consistent system preserves causally linked orders of operations.
-- In practice, however, determining which operations are causally linked and which ones are not is tedious.
-- Thus in practice in a causally consistent system we weaken the second criterion of linearizability:
-	- All operations are atomic, acting as though they happened at instantaneous moments in time, resulting in an implicit order of operations within the system.
-	- If two ops are in flight at the same time, the ops may be applied in any order.
+**There are deep connections between ordering, linearizability, and consensus.**  
+Linearizability affords a total ordering.  However, you can have causal consistency without linearizability (a partial ordering).  A causally consistent system preserves causally linked orders of operations.  
+In practice, however, determining which operations are causally linked and which ones are not is tedious.  Thus in practice in a causally consistent system we weaken the second criterion of linearizability:
+- All operations are atomic, acting as though they happened at instantaneous moments in time, resulting in an implicit order of operations within the system.
+- If two ops are in flight at the same time, the ops may be applied in any order.
+
+<img src="resources/pictures/ddia_c9_causal_what.png" alt="ddia_c9_causal_what" width="400"/>  
+
 - The difference between causal consistency and linearizability is that in the latter case the timestamps of concurrent requests cannot be compared, because there is no globally consistent timestamp.
-- Causal consistency can be achieved without linearization.
-- Causal consistency is the strongest consistency model that doesn't incur a heavy network cost.
-- Providing it requires defining a sequence of operations across nodes that the nodes agree upon.
-- First problem: how do you get a sequence of numbers that matches the operational sequence?
+  - Causal consistency can be achieved without linearization.
+  - Causal consistency is the strongest consistency model that doesn't incur a heavy network cost.
+  - Providing it requires defining a sequence of operations across nodes that the nodes agree upon.
+
+#### Sequence
+How do you get a sequence of numbers that matches the operational sequence?  
 - Using a naive solution, like clocks, won't work, because see chapter 8.
 - Lamport timestamps are a lightweight way of achieving this agreed-upon sequential order. In this algorithm nodes increment a (node_unique_id, node_sequence_number, largest_sequence_number_seen) counter.
-- If a node wants to add an op to the log, it increments its sequence number.
-- If a node sees a message with a larger sequence number, it immediately raises its own next sequence number to match.
-- The unique ID is used to break sequence number ties.
+  - If a node wants to add an op to the log, it increments its sequence number.
+  - If a node sees a message with a larger sequence number, it immediately raises its own next sequence number to match.
+  - The unique ID is used to break sequence number ties.
 - Vector clocks are an alternative more heavyweight algorithm.
-- Systems using these schemes are eventually consistent across all nodes.
-- However, this is insufficient if there are requests (like e.g. asking for a unique username) that need to be aware of every previous operation at runtime.
+- Systems using these schemes are eventually consistent across all nodes.  However, this is insufficient if there are requests (like e.g. asking for a unique username) that need to be aware of every previous operation at runtime.
 - Supporting such operations requires knowing, eventually, the total order of operations. The systems that provide this are performing total order broadcast (also known as atomic broadcast).
 - Total order broadcast requires two operational capacities:
 	- Reliable delivery (no message loss)
 	- Totally ordered delivery (messages are delivered to all nodes in the same order).
 - Implementing consensus requires implementing total order broadcast. This feature is provided by e.g. etcd and Zookeeper.
 - Linearizable systems can be used to build total order broadcast systems, and vice versa.
-- While these two properties are different, having one allows you to have the other, if you desire.
 
 ### Consensus
 Consensus algorithms are a class of algorithms for addressing the node consensus problem.  No matter how you design a distributed system, there will always be situations where all nodes must agree on state. For example, transactions across data partitions on different nodes, or leader elections.  
@@ -98,4 +99,5 @@ My implementation for [raft](https://github.com/CodeBear801/mit6.824/tree/master
 
 ### Reference
 - [浅析分布式系统中的 Linearizability](https://yq.aliyun.com/articles/98608)
-- [吴镝 - Vector Clock/Version Clock](http://www.cnblogs.com/foxmailed/p/4985848.html)  
+- [吴镝 - Vector Clock/Version Clock](http://www.cnblogs.com/foxmailed/p/4985848.html) 
+- [Distributed Consistency and Session Anomalies](https://blog.acolyer.org/2016/02/26/distributed-consistency-and-session-anomalies/) 
