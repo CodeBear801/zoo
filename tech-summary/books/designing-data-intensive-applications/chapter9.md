@@ -39,6 +39,7 @@ Linearizability
 
 
 ### Ordering
+My notes for [vector clock](../../papers/lamport_logic_clock.md)  
 - Linearizability implies causal consistency 
 - That is because linearizability affords a total ordering.
 - However, you can have causal consistency without linearizability (a partial ordering).
@@ -73,6 +74,7 @@ Consensus algorithms are a class of algorithms for addressing the node consensu
 Total order broadcast is an identity transform of a consensus algorithm.
 
 #### Two phase commit
+My notes for [2pc and 3pc](../../papers/2pc_3pc.md)  
 - Two-phase commit relies on a coordinator, usually a separate process, which performs a pre-flight check on all of the nodes involving, asking if they can perform the op. The nodes check and reply yes or no. If any nodes say no, the state change is aborted. If all nodes say yes, the coordinator sends a green light.
 - This algorithm obviously relies on atomic broadcast to work.
 - This algorithm has one glaring weakness: if the coordinator goes down after all nodes ack but before it can send a green or red light, it's non-obvious how to recover (restarting the coordinator, sure, but that takes time).  If nodes are blocked during this period (they probably are), this is really bad, as it stops the system dead.
@@ -94,4 +96,4 @@ Total order broadcast is an identity transform of a consensus algorithm.
 
 ### Reference
 - [浅析分布式系统中的 Linearizability](https://yq.aliyun.com/articles/98608)
-- [吴镝 - Vector Clock/Version Clock](http://www.cnblogs.com/foxmailed/p/4985848.html)
+- [吴镝 - Vector Clock/Version Clock](http://www.cnblogs.com/foxmailed/p/4985848.html)  
