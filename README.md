@@ -5,7 +5,7 @@ Tech summary and code snippets
 [C++ tools](tech-summary/language/c++/c++tools.md)   
 
 ## Book reading
-[\<\<Design data intensive application\>\>](tech-summary/books/designing-data-intensive-applications/README.md)  
+[\<\<Design data intensive application\>\>](tech-summary/books/designing-data-intensive-applications/README.md) First book about distributed system    
 [\<\<A Programmer's Guide to Data Mining\>\>](mining-massive-datasets/recommendation/)  
 
 ## Code snippets
