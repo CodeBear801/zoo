@@ -5,6 +5,9 @@
 	- [Questions](#questions)
 	- [Notes](#notes)
 		- [Transactions](#transactions)
+			- [Consistent](#consistent)
+			- [Isolated](#isolated)
+				- [Terms](#terms)
 		- [Single-Object and Multi-Object Operations](#single-object-and-multi-object-operations)
 			- [Single-object writes](#single-object-writes)
 			- [Multi-Object Operations](#multi-object-operations)
@@ -38,6 +41,28 @@
 
 <img src="resources/pictures/ddia_c7_acid.png" alt="ddia_c7_acid" width="600"/>  
 <br/>
+
+#### Consistent
+- Consistent in replication means evantural consistent and read your own write consistent
+- Consistent in CAP means linearizability, when there is one client successfully write, after that, other client's read must see the value just be writtern
+- Consistent in ACID means database is correct between transection, like money transfer between the two
+
+#### Isolated
+
+**Isolation Level**  
+<img src="resources/pictures/ansi-sql-isolation-levels.png" alt="ansi-sql-isolation-levels" width="600"/>  
+<br/>
+
+**Isolation levels table**  
+<img src="resources/pictures/isolation-levels-table.png" alt="isolation-levels-table" width="600"/>  
+<br/>
+
+##### Terms
+脏写: 写入和提交之间，又别写入了别的数据.  
+脏读：一个事务还未提交，另外一个事务访问此事务修改的数据，并使用，读取了事务中间状态数据。  
+幻读：一个事务读取2次，得到的记录条数不一致，由于2次读取之间另外一个事务对数据进行了增删。 (insert & delete)
+不可重复读：一个事务读取同一条记录2次，得到的结果不一致，由于在2次读取之间另外一个事务对此行数据进行了修改。(update)  
+更新丢失: 其含义为T1要更新x的数据，其首先读取x的值，然后再该值上加1再写回数据库。但是在读取x后，T2写入了新的x并成功提交，而T1还是在老的x值的基础上加1。这样，T2的更新对于T1而言就像被丢弃了一样  
 
 ### Single-Object and Multi-Object Operations
 
@@ -144,6 +169,13 @@ Serializable snapshot isolation | * based on snapshot isolation, but adds an add
 
 <img src="resources/pictures/postgresql-Serialization-Anomalies-in-Snapshot-Isolation.png" alt="postgresql-Serialization-Anomalies-in-Snapshot-Isolation" width="600"/>  
 <br/>
+
+- SSI example from book  
+
+<img src="resources/pictures/ddia_c7_ssi_example.png" alt="ddia_c7_ssi_example" width="600"/>  
+<br/>
+事务42先提交，并且成功了。当事务43提交时，发现事务42已经提交了与自己相冲突的写入，所以必须中止事务43  
+
 - How to avoid dead lock in 2PL(a separate thread checking)  
 
 [CMU Concurrancy control](https://15721.courses.cs.cmu.edu/spring2017/slides/03-cc.pdf)  
@@ -158,3 +190,7 @@ You can evade phantom skew by using predicate locks. These lock on all data in 
 ## Reference
 - [postgresql transaction iso](https://www.postgresql.org/docs/9.5/transaction-iso.html)
 - [postgresql high performance tips](https://vladmihalcea.com/9-postgresql-high-performance-performance-tips/)
+- [A Critique of ANSI SQL Isolation Levels](https://blog.acolyer.org/2016/02/24/a-critique-of-ansi-sql-isolation-levels/)
+- [InnoDB存储引擎MVCC实现原理](https://liuzhengyang.github.io/2017/04/18/innodb-mvcc/)
+- [SQL Server Isolation Levels : A Series](https://sqlperformance.com/2014/07/t-sql-queries/isolation-levels)
+- [mysql的可重复读隔离级别实现](https://www.jianshu.com/p/69fd2ca17cfd)
