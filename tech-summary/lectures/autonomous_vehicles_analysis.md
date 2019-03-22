@@ -7,6 +7,7 @@ Thursday, March 21, 2019<br/>
 - Distance warning is the main feature for ADAS
 - Radar + camera is the most popular solution for now
 - 2025-2030 there will be lots of self-drive bus and shuttle
+- Mobility service provider(software + hardware) will be the center instead of car maker
 
 ## Slides
 
