@@ -93,19 +93,32 @@ class HMM:
 
         # DP matrix containing max likelihood of state at a given time
         V = np.zeros((N, T))
+        # [0.6 0.4] * [0.5 0.1]
         V[:,0] = self.pi * self.B[:,obs_seq[0]]
+        print "=== inside viterbi" + str(V)
+
+        print "A is " + str(self.A)
+        print "B is " + str(self.B)
 
         for t in range(1, T):
             for n in range(N):
+                print ' n = ' + str(n) + ' t = ' + str(t)
+                print 'V[:,t-1] = ' + str(V[:,t-1] ) 
+                print 'self.A[:,n] = ' + str(self.A[:,n])
+                print 'self.B[n, obs_seq[t]] = ' + str(self.B[n, obs_seq[t]])
                 seq_probs = V[:,t-1] * self.A[:,n] * self.B[n, obs_seq[t]]
+                print 'seq_probs = ' + str(seq_probs)
                 prev[t-1,n] = np.argmax(seq_probs)
                 V[n,t] = np.max(seq_probs)
+                print 'argmax = ' + str(np.argmax(seq_probs))
+                print 'max(seq_probs) = ' + str(np.max(seq_probs))
 
         return V, prev
 
     def build_viterbi_path(self, prev, last_state):
         """Returns a state path ending in last_state in reverse order."""
         T = len(prev)
+        # https://www.ibm.com/developerworks/cn/opensource/os-cn-python-yield/index.html
         yield(last_state)
         for i in range(T-1, -1, -1):
             yield(prev[i, last_state])

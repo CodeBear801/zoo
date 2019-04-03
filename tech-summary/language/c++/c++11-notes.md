@@ -128,7 +128,7 @@ inline bool operator<(const OSMObject& lhs, const OSMObject& rhs) noexcept {
 
 ### enable if  
 enable_if is a compile-time switch for templates, which will check at compilation time and provide more protection.  
-- Below is a simple case for demoing two way of using enable_if [code snippet](http://cpp.sh/93kbw)
+- Below is a simple case for demoing two way of using enable_if [code snippet](http://cpp.sh/9tlqm)
 ```C++
 // 1. the return type (bool) is only valid if T is an integral type:
 template <class T>
