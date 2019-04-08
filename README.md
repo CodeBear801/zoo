@@ -8,7 +8,7 @@ Tech summary and code snippets
 ## Presentation
 
 Date | Name | Links | Comments
---- |:---|:---|:---|:---
+---|:---|:---|:---|:---
 04-10-2019|Open Source Navigation Solution||
 11-02-2018|Valhalla Map Matching|[slides](https://github.com/Telenav/open-source-spec/blob/master/valhalla/resource/presentations/valhalla_mm_11202018.pptx) |
 10-27-2018|Streaming Architecture|[slides](https://github.com/CodeBear801/zoo/blob/master/tech-summary/slides/10262018_streaming_architecture.pptx)|
