@@ -9,7 +9,7 @@ Tech summary and code snippets
 
 Date | Name | Links | Comments
 ---|:---|:---|:---
-04-10-2019|Open Source Navigation Solution||
+04-10-2019|Open Source Navigation Solution|[slides](https://github.com/Telenav/open-source-spec/blob/master/routing_basic/resource/presentations/20190410_open_source_solution_for_Navigation.pptx)|
 11-02-2018|Valhalla Map Matching|[slides](https://github.com/Telenav/open-source-spec/blob/master/valhalla/resource/presentations/valhalla_mm_11202018.pptx) |
 10-27-2018|Streaming Architecture|[slides](https://github.com/CodeBear801/zoo/blob/master/tech-summary/slides/10262018_streaming_architecture.pptx)|
 09-24-2018|Morden routing algorithm|[slides](https://github.com/Telenav/open-source-spec/blob/master/routing_basic/resource/presentations/modern_routing_alg_09242018_reduced_size.pptx)|
