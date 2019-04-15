@@ -1,8 +1,12 @@
 - [How to work in open source community](#how-to-work-in-open-source-community)
   - [Async communication](#async-communication)
   - [Define rules for your project](#define-rules-for-your-project)
+  - [How to write commit message](#how-to-write-commit-message)
+    - [More information](#more-information)
   - [How to creat a pull request](#how-to-creat-a-pull-request)
-  - [More information](#more-information)
+  - [Branching rules](#branching-rules)
+    - [More information](#more-information-1)
+  - [More information](#more-information-2)
 
 # How to work in open source community
 
@@ -48,6 +52,15 @@ Reference come from [robosat#contributing](https://github.com/mapbox/robosat#con
 - We take responsibility for changesets going into master: as soon as your changeset gets approved it is on us to maintain and debug it. If your changeset can not be tested, or maintained in the future by the core developers we most likely won't accept your changeset.
 ```
 
+## How to write commit message
+
+
+Recommend [AngularJS Git Commit Message Conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#heading=h.uyo6cb12dt6w)  
+
+### More information
+- [How to keep your git commit history clean](https://about.gitlab.com/2018/06/07/keeping-git-commit-history-clean/)
+- [阮一峰.Commit message 和 Change log 编写指南](http://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html)
+
 
 ## How to creat a pull request
 ```
@@ -78,9 +91,23 @@ Reference come from [robosat#contributing](https://github.com/mapbox/robosat#con
 Good example could be: [OSRM-3408](https://github.com/Project-OSRM/osrm-backend/pull/3408), [ROCKSDB-3009](https://github.com/facebook/rocksdb/pull/3009), [Turfjs-832](https://github.com/Turfjs/turf/pull/832)
 
 
+## Branching rules
+
+<object data="https://nvie.com/files/Git-branching-model.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://nvie.com/files/Git-branching-model.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://nvie.com/files/Git-branching-model.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
+
+Recommand using [git flow](https://github.com/nvie/gitflow)  
+
+### More information
+- [A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/)
+- [在阿里，我们如何管理代码分支？](https://yq.aliyun.com/articles/573549)
+- [git-flow cheatsheet](https://danielkummer.github.io/git-flow-cheatsheet/)
+
 
 ## More information
-- [How to keep your git commit history clean](https://about.gitlab.com/2018/06/07/keeping-git-commit-history-clean/)
 - [How GitHub Works: Be Asynchronous](https://zachholman.com/posts/how-github-works-asynchronous/)
 - [Learn the workings of Git, not just the commands](https://developer.ibm.com/tutorials/d-learn-workings-git/)
 
