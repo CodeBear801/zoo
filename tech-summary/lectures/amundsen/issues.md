@@ -13,6 +13,9 @@ Here is the instruction I followed: [link](https://github.com/lyft/amundsenfront
       image: amundsen-frontend:local
 ```
   Notes: Amudsen team update docker image on cloud side and fixed this issue in (image: amundsendev/amundsen-frontend:1.0.5).  I met following issues during generating forntend docker file in local
+```bash
+docker build -f public.Dockerfile -t amundsen-frontend:local .
+```
 
 2. Failed to build with node
   Issue is similar to this one [issues-6](https://github.com/lyft/amundsenfrontendlibrary/issues/6)  
@@ -77,14 +80,23 @@ I always met with the issue like
 ServiceUnavailable: Failed to establish connection to xxxx,xxx
 neo4j connectionrefusederror errno 61 connection refused mac
 ```
-Soulution: Update node4j's password.  Go to http://192.168.99.100:7474/browser/ or http://0.0.0.0:7474/browser, input old password and then update new password with 'test'.  Please make sure password in docker-amudensen.yml file is also test.
+Soulution: 
+- Update node4j's password.  Go to http://192.168.99.100:7474/browser/ or http://0.0.0.0:7474/browser, input old password and then update new password with 'test'.  Please make sure password in docker-amudensen.yml file is also test.
 ```
   neo4j:
       environment:
         - CREDENTIALS_PROXY_USER=neo4j
         - CREDENTIALS_PROXY_PASSWORD=test
 ```
-
+- I also tried to disable authetication for neo4j, but seems it didn't work
+go into container
+```
+docker exec -it 0f495da1c0dce3330c41d0386170423ff23be742e0b2031efbb040fe0ca9e2c7  /bin/bash
+```
+Modify conf/neo4j.conf, remove following line [ref](https://neo4j.com/docs/operations-manual/current/authentication-authorization/enable/)
+```
+dbms.security.auth_enabled=false
+```
 
 
 ## Test
