@@ -1,6 +1,7 @@
 
 - [Amundsen: A Data discovery platform from lyft](#amundsen-a-data-discovery-platform-from-lyft)
   - [Take away](#take-away)
+  - [Useful links](#useful-links)
   - [Notes](#notes)
     - [Why amundsen](#why-amundsen)
     - [Lyft's data infra](#lyfts-data-infra)
@@ -29,6 +30,11 @@ Wednesday, May 15, 2019<br/>
 - push vs pull
 - Lyft's data infra
 
+
+## Useful links
+- [Notes during setup Amundsen](./issues.md)
+- [Amundsen - Lyft's data discovery & metadata engine](https://eng.lyft.com/amundsen-lyfts-data-discovery-metadata-engine-62d27254fbb9) (Lyft engineering blog)
+- [Disrupting Data Discovery](https://www.slideshare.net/taofung/strata-sf-amundsen-presentation) (Strata SF 2019)
 
 ## Notes
 
@@ -76,7 +82,7 @@ More information about Apache Gobblin: [Gobblin: Unifying Data Ingestion for Had
 - Databuilder example
 
 <img src="../resources/imgs/amundsen_databuilder_in_action.png" alt="amundsen_databuilder_in_action" width="600"/>  <br/>
-In general, its ETL and then publish    
+In general,  ETL + publish    
 
 <img src="../resources/imgs/amundsen_databuilder_code.png" alt="amundsen_databuilder_code" width="600"/>  <br/>
 The upper code demos inside databuilder, how to define task and job to build data   
@@ -124,6 +130,15 @@ Popularity - Search apple on google, "apple"(company) has higher popularity
 <img src="../resources/imgs/amundsen_metadata_service_2.png" alt="amundsen_metadata_service_2" width="600"/><br/>
 
 <img src="../resources/imgs/amundsen_metadata_service_3.png" alt="amundsen_metadata_service_3" width="600"/><br/>
+
+Why Airflow
+Apache Airflow is a very popular workflow management project. It’s known for dependency management. It handle like schedules, certain job in a fixed schedule library.  
+An example:  
+- Get the metadata for all the table detail first. 
+- Once that is done, then kickoff the extended metadata. It could be the statistic for this table. Who used this 
+table? What is the high watermark or low watermark of this table? Then there’s certain sequence.  
+Once build each of these as an Airflow task in the deck, then Airflow will kick off in a certain sequence. 
+
 
 <img src="../resources/imgs/amundsen_metadata_service_4.png" alt="amundsen_metadata_service_4" width="600"/><br/>
 
