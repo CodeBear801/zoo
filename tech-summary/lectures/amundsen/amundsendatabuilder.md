@@ -1,6 +1,6 @@
 # [amundsendatabuilder](https://github.com/lyft/amundsendatabuilder)
 
-## Architecture
+## Structure
 [amundsendatabuilder](https://github.com/lyft/amundsendatabuilder/blob/master/README.md)
 
 <img src="../resources/imgs/amundsen_databuilder_arch2.png" alt="amundsen_databuilder_arch2" width="600"/>
@@ -54,9 +54,7 @@ Publish means call RPC interface of other micro services to register data into.
 
 Task + Job
 
-<img src="../resources/imgs/amundsen_databuilder_code.png" alt="amundsen_databuilder_code" width="400"/>  <br/>
-
-
+<img src="../resources/imgs/amundsen_databuilder_code.png" alt="amundsen_databuilder_code" width="400"/>  <br/> 
 
 
 ## Example
@@ -64,37 +62,35 @@ Task + Job
 
 ### Input
 sampole_col.csv
-```csv
-name,description,col_type,sort_order,database,cluster,schema_name,table_name,table_desc
-col1,"col1","string",1,hive,gold,test_schema,test_table1,"1st test table"
-col2,"col2","string",2,hive,gold,test_schema,test_table1,"1st test table"
-col3,"col3","string",3,hive,gold,test_schema,test_table1,"1st test table"
-col4,"col4","string",4,hive,gold,test_schema,test_table1,"1st test table"
-col1,"col1","string",1,dynamo,gold,test_schema,test_table2,"2nd test table"
-col2,"col2","string",2,dynamo,gold,test_schema,test_table2,"2nd test table"
-col3,"col3","string",3,dynamo,gold,test_schema,test_table2,"2nd test table"
-col4,"col4","string",4,dynamo,gold,test_schema,test_table2,"2nd test table"
-```
+|name|description|col_type|sort_order|database|cluster|schema_name|table_name |table_desc    |
+|----|-----------|--------|----------|--------|-------|-----------|-----------|--------------|
+|col1|col1       |string  |1         |hive    |gold   |test_schema|test_table1|1st test table|
+|col2|col2       |string  |2         |hive    |gold   |test_schema|test_table1|1st test table|
+|col3|col3       |string  |3         |hive    |gold   |test_schema|test_table1|1st test table|
+|col4|col4       |string  |4         |hive    |gold   |test_schema|test_table1|1st test table|
+|col1|col1       |string  |1         |dynamo  |gold   |test_schema|test_table2|2nd test table|
+|col2|col2       |string  |2         |dynamo  |gold   |test_schema|test_table2|2nd test table|
+|col3|col3       |string  |3         |dynamo  |gold   |test_schema|test_table2|2nd test table|
+|col4|col4       |string  |4         |dynamo  |gold   |test_schema|test_table2|2nd test table|
 sample_table.csv
-```csv
-database,cluster,schema_name,table_name,table_desc
-hive,gold,test_schema,test_table1,"1st test table"
-dynamo,gold,test_schema,test_table2,"2nd test table"
+|database|cluster|schema_name|table_name|table_desc|
+|--------|-------|-----------|----------|----------|
+|hive    |gold   |test_schema|test_table1|1st test table|
+|dynamo  |gold   |test_schema|test_table2|2nd test table|
+sample_user.csv  
+|email|first_name|last_name|name|github_username|team_name    |employee_type|manager_email     |slack_id|
+|-----|----------|---------|----|---------------|-------------|-------------|------------------|--------|
+|roald.amundsen@example.org|Roald     |Amundsen |Roald Amundsen|lyft           |Team Amundsen|sailor       |phboss@example.org|ramundzn|
+|chrisc@example.org|Christopher|Columbus |Christopher Columbus|ChristopherColumbusFAKE|Team Amundsen|sailor       |phboss@example.org|chrisc  |
+|buzz@example.org|  Buzz    |       Aldrin|Buzz Aldrin|BuzzAldrinFAKE |Team Amundsen|astronaut    |phboss@example.org|buzz    |
 
-```
-sample_user.csv
-```csv
-email,first_name,last_name,name,github_username,team_name,employee_type,manager_email,slack_id
-roald.amundsen@example.org,Roald,Amundsen,"Roald Amundsen",lyft,"Team Amundsen",sailor,"phboss@example.org",ramundzn
-chrisc@example.org,Christopher,Columbus,"Christopher Columbus",ChristopherColumbusFAKE,"Team Amundsen",sailor,"phboss@example.org",chrisc
-buzz@example.org,  Buzz,       Aldrin,  "Buzz Aldrin",BuzzAldrinFAKE,                  "Team Amundsen",astronaut,"phboss@example.org",buzz
-```
-
+<br/>
 
 #1. Load data
 Load each of csv and put them into embedded database sqlite3
 
 #2. Create job and publish to neo4j
+[code](https://github.com/lyft/amundsendatabuilder/blob/bfb69f03fa6553f3b2199855423814caacc2c493/example/scripts/sample_data_loader.py#L152)  
 
 ```python
     sql_extractor = SQLAlchemyExtractor()
@@ -111,7 +107,8 @@ Load each of csv and put them into embedded database sqlite3
     job.launch()
 ```
 
-#3. Create job and publish to elasticsearch
+#3. Create job and publish to elasticsearch   
+[code](https://github.com/lyft/amundsendatabuilder/blob/bfb69f03fa6553f3b2199855423814caacc2c493/example/scripts/sample_data_loader.py#L197)  
 
 ```python
     # loader save data to this location and publisher read if from here

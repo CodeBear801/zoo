@@ -19,7 +19,7 @@
 # Amundsen: A Data discovery platform from lyft
 
 Wednesday, May 15, 2019<br/>
-6:30--7:15  <br/>
+6:30--7:15  Philippe Mizrahi, Jin Hyuk Chang <br/>
 @Lyft HQ <br/>
 
 
