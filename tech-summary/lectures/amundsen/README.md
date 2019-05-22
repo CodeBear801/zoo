@@ -11,6 +11,8 @@
     - [Search Service](#search-service)
       - [Challenge: How to make the search result more relevant](#challenge-how-to-make-the-search-result-more-relevant)
     - [Metadata service](#metadata-service)
+      - [Trade off: Why choose graph database](#trade-off-why-choose-graph-database)
+      - [Trade off: Why not propagate the metadata back to source](#trade-off-why-not-propagate-the-metadata-back-to-source)
 
 
 # Amundsen: A Data discovery platform from lyft
@@ -65,11 +67,11 @@ Amundsen mainly target is decreasing the effort used in data discovery
 
 <img src="../resources/imgs/amundsen_databuilder.png" alt="amundsen_databuilder" width="600"/>
 
-The design is simiar to Apache Gobblin  
+The design is similar to Apache Gobblin  
 
 <img src="../resources/imgs/amundsen_databuilder_gl.png" alt="amundsen_databuilder_gl" width="600"/>
 
-More infomation about Apache Gobblin: [Gobblin: Unifying Data Ingestion for Hadoop](http://www.vldb.org/pvldb/vol8/p1764-qiao.pdf), [Gobblin: A Framework for Solving Big Data Ingestion Problem](https://www.slideshare.net/InfoQ/gobblin-a-framework-for-solving-big-data-ingestion-problem), [Announcing Gobblin 0.7.0: Going Beyond Ingestion](https://engineering.linkedin.com/blog/2016/06/announcing-gobblin-0-7-0--going-beyond-ingestion), [Gobblin--一个用于Hadoop的统一"数据抽取框架"](https://blog.csdn.net/lmalds/article/details/53940549)
+More information about Apache Gobblin: [Gobblin: Unifying Data Ingestion for Hadoop](http://www.vldb.org/pvldb/vol8/p1764-qiao.pdf), [Gobblin: A Framework for Solving Big Data Ingestion Problem](https://www.slideshare.net/InfoQ/gobblin-a-framework-for-solving-big-data-ingestion-problem), [Announcing Gobblin 0.7.0: Going Beyond Ingestion](https://engineering.linkedin.com/blog/2016/06/announcing-gobblin-0-7-0--going-beyond-ingestion), [Gobblin--一个用于Hadoop的统一"数据抽取框架"](https://blog.csdn.net/lmalds/article/details/53940549)
 
 - Databuilder example
 
@@ -77,7 +79,7 @@ More infomation about Apache Gobblin: [Gobblin: Unifying Data Ingestion for Hado
 In general, its ETL and then publish    
 
 <img src="../resources/imgs/amundsen_databuilder_code.png" alt="amundsen_databuilder_code" width="600"/>  <br/>
-The upper code demos insdie databuilder, how to define task and job to build data   
+The upper code demos inside databuilder, how to define task and job to build data   
 
 <img src="../resources/imgs/amundsen_databuilder_orchestrated.png" alt="amundsen_databuilder_orchestrated" width="600"/>  <br/>
 
@@ -117,7 +119,27 @@ Popularity - Search apple on google, "apple"(company) has higher popularity
 
 ### Metadata service
 
+<img src="../resources/imgs/amundsen_metadata_service.png" alt="amundsen_metadata_service" width="600"/><br/>
 
+<img src="../resources/imgs/amundsen_metadata_service_2.png" alt="amundsen_metadata_service_2" width="600"/><br/>
+
+<img src="../resources/imgs/amundsen_metadata_service_3.png" alt="amundsen_metadata_service_3" width="600"/><br/>
+
+<img src="../resources/imgs/amundsen_metadata_service_4.png" alt="amundsen_metadata_service_4" width="600"/><br/>
+
+#### Trade off: Why choose graph database
+
+1. Graph database is great for handling lots of join  
+      nosql: out of lock/sync  
+      relationdatabase: up to 2~3 tables, if more then would be slow  
+
+2. Graph database could represent the flow better
+
+
+#### Trade off: Why not propagate the metadata back to source
+<img src="../resources/imgs/amundsen_metadata_service_writeback.png" alt="amundsen_metadata_service_writeback" width="600"/><br/>
+If we want to push data back to hive, one related open source on github didn't allow to modify  
+But apache atlas allow to write back  
 
 
 
