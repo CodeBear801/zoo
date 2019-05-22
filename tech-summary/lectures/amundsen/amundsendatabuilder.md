@@ -15,7 +15,7 @@
 
 
 ## Task
-[Class task](https://github.com/lyft/amundsendatabuilder/blob/bfb69f03fa6553f3b2199855423814caacc2c493/databuilder/task/task.py) orchestrates extractor, transformer and loader.  The most important function is [run](https://github.com/lyft/amundsendatabuilder/blob/bfb69f03fa6553f3b2199855423814caacc2c493/databuilder/task/task.py#L48)  
+[Class task](https://github.com/lyft/amundsendatabuilder/blob/bfb69f03fa6553f3b2199855423814caacc2c493/databuilder/task/task.py) orchestrates extractor, transformer and loader.  The most important function is [run()](https://github.com/lyft/amundsendatabuilder/blob/bfb69f03fa6553f3b2199855423814caacc2c493/databuilder/task/task.py#L48)  
 ```python
     def run(self):
         try:
@@ -34,7 +34,7 @@
 A record is representeed by one of [models](https://github.com/lyft/amundsendatabuilder/tree/master/databuilder/models).
 
 ## Job
-Job orchestrates task and publisher.  In its function [launch](https://github.com/lyft/amundsendatabuilder/blob/master/databuilder/job/job.py#L53)
+Job orchestrates task and publisher.  In its function [launch()](https://github.com/lyft/amundsendatabuilder/blob/master/databuilder/job/job.py#L53)
 ```python
 def launch(self):
         try:
@@ -62,6 +62,7 @@ Task + Job
 
 ### Input
 sampole_col.csv
+
 |name|description|col_type|sort_order|database|cluster|schema_name|table_name |table_desc    |
 |----|-----------|--------|----------|--------|-------|-----------|-----------|--------------|
 |col1|col1       |string  |1         |hive    |gold   |test_schema|test_table1|1st test table|
@@ -72,7 +73,9 @@ sampole_col.csv
 |col2|col2       |string  |2         |dynamo  |gold   |test_schema|test_table2|2nd test table|
 |col3|col3       |string  |3         |dynamo  |gold   |test_schema|test_table2|2nd test table|
 |col4|col4       |string  |4         |dynamo  |gold   |test_schema|test_table2|2nd test table|
+
 sample_table.csv
+
 |database|cluster|schema_name|table_name|table_desc|
 |--------|-------|-----------|----------|----------|
 |hive    |gold   |test_schema|test_table1|1st test table|
