@@ -48,9 +48,9 @@ Wednesday, May 15, 2019<br/>
   - AmundsenMetadata holds metadata information and user's comments
 
 - First Question: How to predict the number of people join today's lyft meetup? 
-  - *Discover what information we have*
-  - *Ask people about the format of data*
-  - *Check whether there is historical data could be used*
+  - **Discover what information we have**
+  - **Ask people about the format of data**
+  - **Check whether there is historical data could be used**
   - Build model
   - Visualization
 
@@ -58,8 +58,9 @@ Wednesday, May 15, 2019<br/>
 
 <img src="../resources/imgs/amundsen_datadiscovery_3.png" alt="amundsen_datadiscovery_3" width="600"/>
 
-What if I am a new comer knows few about the company/people/data   
-Even as a Senior engineer, I don’t want to be bothered by lots of questions  
+Two kind of DS in LYFT:
+- What if I am a new comer knows few about the company/people/data   
+- Even as a Senior engineer, I don’t want to be bothered by lots of questions  
 
 <img src="../resources/imgs/amundsen_datadiscovery_4.png" alt="amundsen_datadiscovery_4" width="600"/>
 
