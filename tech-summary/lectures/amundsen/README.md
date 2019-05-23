@@ -59,15 +59,21 @@ Even as a Senior engineer, I don’t want to be bothered by lots of questions
 
 Amundsen mainly target is decreasing the effort used in data discovery  
 
+***
 
 
 ### Lyft's data infra
 
 <img src="../resources/imgs/lyft_data_infra.png" alt="lyft_data_infra" width="600"/>
 
+***
+
+
 ### Amundsen's architecture
 
 <img src="../resources/imgs/amundsen_arch_overview.png" alt="amundsen_arch_overview" width="600"/>
+
+***
 
 
 ### DataBuilder Service
@@ -107,6 +113,9 @@ Push model: streaming process, real time
 
 <img src="../resources/imgs/amundsen_databuilder_push_pull.png" alt="amundsen_databuilder_push_pull_2" width="600"/><br/>
 
+***
+
+
 ### Search Service
 
 <img src="../resources/imgs/amundsen_search_arch.png" alt="amundsen_search_arch" width="600"/><br/>
@@ -122,6 +131,8 @@ Relevance - Search apple on google, "Orange" has lower relevance while "Apple" h
 Popularity - Search apple on google, "apple"(company) has higher popularity  
 
 <img src="../resources/imgs/amundsen_search_challenge_2.png" alt="amundsen_search_challenge_2" width="600"/><br/>
+
+***
 
 
 ### Metadata service
