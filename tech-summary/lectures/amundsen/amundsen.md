@@ -100,11 +100,20 @@ Once build each of these as an Airflow task in the deck, then Airflow will kick 
 
 #### Trade off: Why choose graph database
 
-1. Graph database is great for handling lots of join  
-      nosql: out of lock/sync  
-      relationdatabase: up to 2~3 tables, if more then would be slow  
+- Graph database is great for handling lots of join  
+   - nosql: out of lock/sync
+   - relationdatabase: up to 2~3 tables, if more then would be slow  
 
-2. Graph database could represent the flow better
+- Graph database could represent the flow better  
+  - For example, a typical Lyft dataflow likes below:
+      - Lyft mobile clients in certain location/ETA information to Kafka topics -> generate data.  
+      - Streaming subscriber will get this information and persist into raw high table.  
+      - Some analysis of data engineer build dataset on top of this raw table into derived table.  
+      - For specific user case needed, will look into a certain column of such derived table.    
+      - This actually is a graph to model the whole flow, each component will be a node and connect them will be edges.  
+  - <span style="color:red">To summary:  </span>
+      - Graph database help to model the flow more easily, application connected with the events.
+      - There is no perfect system at beginning, final table format could be changed which need more join operation in the future
 
 
 #### Trade off: Why not propagate the metadata back to source
@@ -117,15 +126,12 @@ But apache atlas allow to write back
 
 ### Background information
 
-#### How data is created in Lyft
-#1. Say you want to take a Lyft ride, you open up your app, go through the “funnel”. You select your destination and you select your mode. Each of those clicks or actions is going to send an event which Lyft track and then later can be used for analysis to see how well that flow works. 
+- How data is created in Lyft
+    - Say you want to take a Lyft ride, you open up your app, go through the “funnel”. You select your destination and you select your mode. Each of those clicks or actions is going to send an event which Lyft track and then later can be used for analysis to see how well that flow works. 
+    - CDC, change data capture. Lyft is taking replicas from online production systems and then bringing them into warehouse in real time. 
+    - Any external data or third party data get from vendors that = upload on the side to Lyft's data warehouse, so folks can do analysis later on. 
 
-#2. CDC, change data capture. Lyft is taking replicas from online production systems and then bringing them into warehouse in real time. 
-
-#3. Any external data or third party data get from vendors that = upload on the side to Lyft's data warehouse, so folks can do analysis later on. 
-
-#### Similar solutions
-
-
+- Similar solutions
+- 
 <img src="../resources/imgs/amundsen_similar_products.png" alt="amundsen_similar_products" width="600"/><br/>
 
