@@ -24,8 +24,6 @@ Wednesday, May 15, 2019<br/>
 6:30--7:15  Philippe Mizrahi, Jin Hyuk Chang <br/>
 @Lyft HQ <br/>
 
-
-
 ## Take away
 - Why amundsen
 - The power of microservice design
@@ -43,7 +41,13 @@ Wednesday, May 15, 2019<br/>
 
 ### Why amundsen
 
-- Question: How to predict the number of people join today's lyft meetup? 
+- Summary
+  - AmundsenFrontend provide one box search to let user discover data information
+  - AmundsenDatabuilder holds ETL jobs and publish data to search service and metadata service
+  - AmundsenSearch index and rank data
+  - AmundsenMetadata holds metadata information and user's comments
+
+- First Question: How to predict the number of people join today's lyft meetup? 
   - *Discover what information we have*
   - *Ask people about the format of data*
   - *Check whether there is historical data could be used*
