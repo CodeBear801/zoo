@@ -14,6 +14,8 @@
     - [Metadata service](#metadata-service)
       - [Trade off: Why choose graph database](#trade-off-why-choose-graph-database)
       - [Trade off: Why not propagate the metadata back to source](#trade-off-why-not-propagate-the-metadata-back-to-source)
+  - [Background information](#background-information)
+    - [How data is created in Lyft](#how-data-is-created-in-lyft)
 
 
 # Amundsen: A Data discovery platform from lyft
@@ -32,7 +34,7 @@ Wednesday, May 15, 2019<br/>
 
 
 ## Useful links
-- [Notes during setup Amundsen](./issues.md)
+- [Setting up Amundsen](./issues.md)
 - Code Analysis [databuilder](./amundsendatabuilder.md) [metadataservice](./amundsenmetadata.md) [searchservice](./amundsensearch.md) 
 - [Amundsen - Lyft's data discovery & metadata engine](https://eng.lyft.com/amundsen-lyfts-data-discovery-metadata-engine-62d27254fbb9) (Lyft engineering blog)
 - [Disrupting Data Discovery](https://www.slideshare.net/taofung/strata-sf-amundsen-presentation) (Strata SF 2019)
@@ -178,6 +180,19 @@ Once build each of these as an Airflow task in the deck, then Airflow will kick 
 <img src="../resources/imgs/amundsen_metadata_service_writeback.png" alt="amundsen_metadata_service_writeback" width="600"/><br/>
 If we want to push data back to hive, one related open source on github didn't allow to modify  
 But apache atlas allow to write back  
+
+
+***
+
+## Background information
+
+### How data is created in Lyft
+#1. Say you want to take a Lyft ride, you open up your app, go through the “funnel”. You select your destination and you select your mode. Each of those clicks or actions is going to send an event which Lyft track and then later can be used for analysis to see how well that flow works. 
+
+#2. CDC, change data capture. Lyft is taking replicas from online production systems and then bringing them into warehouse in real time. 
+
+#3. Any external data or third party data get from vendors that = upload on the side to Lyft's data warehouse, so folks can do analysis later on. 
+
 
 
 
