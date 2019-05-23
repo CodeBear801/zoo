@@ -125,6 +125,9 @@ Popularity - Search apple on google, "apple"(company) has higher popularity
 
 ### Metadata service
 
+What is meta data  
+[metadata](http://cidrdb.org/cidr2017/papers/p111-hellerstein-cidr17.pdf) means a set of data that describes and gives information about other data.  
+
 <img src="../resources/imgs/amundsen_metadata_service.png" alt="amundsen_metadata_service" width="600"/><br/>
 
 <img src="../resources/imgs/amundsen_metadata_service_2.png" alt="amundsen_metadata_service_2" width="600"/><br/>
