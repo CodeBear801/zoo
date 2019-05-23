@@ -33,6 +33,7 @@ Wednesday, May 15, 2019<br/>
 
 ## Useful links
 - [Notes during setup Amundsen](./issues.md)
+- Code Analysis [databuilder](./amundsendatabuilder.md) [metadataservice](./amundsenmetadata.md) [searchservice](./amundsensearch.md) 
 - [Amundsen - Lyft's data discovery & metadata engine](https://eng.lyft.com/amundsen-lyfts-data-discovery-metadata-engine-62d27254fbb9) (Lyft engineering blog)
 - [Disrupting Data Discovery](https://www.slideshare.net/taofung/strata-sf-amundsen-presentation) (Strata SF 2019)
 
@@ -125,8 +126,16 @@ Popularity - Search apple on google, "apple"(company) has higher popularity
 
 ### Metadata service
 
-What is meta data  
+*What is metadata*  
 [metadata](http://cidrdb.org/cidr2017/papers/p111-hellerstein-cidr17.pdf) means a set of data that describes and gives information about other data.  
+<br/>
+**ABC of metadata**
+- A is application context. This is information that you and I and everyone needs in
+order to just do our job. What data exists, where is it and what does it mean? 
+- B for behavior, which is who’s using it? What applications are built on it and
+so on?
+- C for change. How is this dataset evolving and why was it evolved? Why did
+someone change the type of this column from string to end? 
 
 <img src="../resources/imgs/amundsen_metadata_service.png" alt="amundsen_metadata_service" width="600"/><br/>
 
