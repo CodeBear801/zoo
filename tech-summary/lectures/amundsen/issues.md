@@ -1,4 +1,4 @@
-# Issues and solutions when set up amundsen
+# Issues and solutions during set up amundsen
 
 Here records issues I met during set up amundsenfrontendlibrary/amundsendatabuilder/amundsenmetadatalibrary/amundsensearchlibrary based on code and docker image.  
 Here is the instruction I followed: [link](https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/installation.md#install-standalone-application-directly-from-the-source)
@@ -29,7 +29,7 @@ Node Sass could not find a binding for your current environment: OS X 64-bit wit
 ```
   Solution: [stackoverflow](https://stackoverflow.com/questions/37986800/node-sass-could-not-find-a-binding-for-your-current-environment/47197646)  
 
-  Sample of docker file, follow the comments from [issues-64] with two modifications: 1. add 'npm rebuild node-sass', 2. change https://deb.nodesource.com/setup_11.x to setup_8.x 
+  Sample of docker file, follow the comments from [issues-64](https://github.com/lyft/amundsenfrontendlibrary/issues/64) with two modifications: 1. add 'npm rebuild node-sass', 2. change https://deb.nodesource.com/setup_11.x to setup_8.x 
 ```docker
 FROM python:3
 WORKDIR /app
