@@ -132,6 +132,6 @@ But apache atlas allow to write back
     - Any external data or third party data get from vendors that = upload on the side to Lyft's data warehouse, so folks can do analysis later on. 
 
 - Similar solutions
-- 
+
 <img src="../resources/imgs/amundsen_similar_products.png" alt="amundsen_similar_products" width="600"/><br/>
 
