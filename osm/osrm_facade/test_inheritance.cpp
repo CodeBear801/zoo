@@ -97,7 +97,7 @@ class MLDShortestPath
 public:
     MLDShortestPath(MLDRoutingData &data) : data(data) {};
 
-    int operator()(BaseDataFacadeInterface &base_facade, MLDAlgorithmDataFacadeInterface &ch_facade)
+    int operator()(BaseDataFacadeInterface &base_facade, MLDAlgorithmDataFacadeInterface &mld_facade)
     {
         data.some_data += 1;
         return data.some_data;
@@ -111,7 +111,7 @@ class MLDDistanceTable
 public:
     MLDDistanceTable(MLDRoutingData &data) : data(data) {};
 
-    int operator()(BaseDataFacadeInterface &base_facade, MLDAlgorithmDataFacadeInterface &ch_facade)
+    int operator()(BaseDataFacadeInterface &base_facade, MLDAlgorithmDataFacadeInterface &mld_facade)
     {
         throw std::runtime_error("Not implemented");
         return 0;
